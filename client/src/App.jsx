@@ -5,24 +5,34 @@ import ProfilePage from "./pages/ProfilePage.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import ExamPage from "./pages/ExamPage.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
+import { QuestionProvider } from "./context/QuestionContext";
+import { ExamProvider } from "./context/examContext.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import Navbar from "./components/navbar.jsx";
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <main className="container mx-auto px-10">
-          <Navbar></Navbar>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />}></Route>
-            <Route path="/register" element={<RegisterPage />}></Route>
-            <Route element={<ProtectedRoute />}>
-              <Route path="/create-exam" element={<ExamPage />}></Route>
-            </Route>
-          </Routes>
-        </main>
-      </BrowserRouter>
+      <ExamProvider>
+        <QuestionProvider>
+          <BrowserRouter>
+            <main className="container mx-auto px-10">
+              <Navbar></Navbar>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+
+                <Route element={<ProtectedRoute />}>
+                  <Route path="/create-exam" element={<ExamPage />} />
+                  <Route path="/create-exam/:id" element={<ExamPage />} />
+
+                  <Route path="/profile" element={<ProfilePage />} />
+                </Route>
+              </Routes>
+            </main>
+          </BrowserRouter>
+        </QuestionProvider>
+      </ExamProvider>
     </AuthProvider>
   );
 }

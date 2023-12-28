@@ -2,8 +2,8 @@ import {pool} from "../db.js"
 
 export const getQuestions = async (req, res) => {
     try {
-        const [result] = await pool.query("SELECT * FROM questions WHERE id_user = ?", [req.user.id])
-
+        const [result] = await pool.query("SELECT * FROM questions WHERE id_user = ? ORDER BY id_question DESC", [req.user.id])
+        
         res.json(result)
     } catch (error) {
         return res.status(500).json({message: error.message})

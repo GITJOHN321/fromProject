@@ -17,6 +17,7 @@ function Navbar() {
             <li>
               <Link to="/create-exam">Exam</Link>
             </li>
+            
             <li>
               <Link to="/" onClick={()=>{logout()}}>Logout</Link>
             </li>

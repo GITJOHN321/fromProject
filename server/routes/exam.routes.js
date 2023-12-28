@@ -28,7 +28,7 @@ router.post(
   authRequired,
   validateSchema(createExamSchema),
   createExam
-);
+); 
 router.post(
   "/exams_questions",
   authRequired,

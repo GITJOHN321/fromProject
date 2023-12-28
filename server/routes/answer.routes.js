@@ -5,6 +5,7 @@ import {
   postAnswer,
   deleteAnswer,
   updateAnswer,
+  updateListAnswer,
 } from "../controllers/answer.controllers.js";
 import { authRequired } from "../middlewares/validateToken.js";
 import { validateSchema } from "../middlewares/validator.schema.js";
@@ -14,6 +15,7 @@ const router = Router();
 router.get("/answers", authRequired, getAnswers);
 router.get("/answers/:id", authRequired, getAnswer);
 router.put("/answers/:id", authRequired, updateAnswer);
+router.post("/answers-list", authRequired, updateListAnswer);
 router.delete("/answers/:id", authRequired, deleteAnswer);
 router.post(
   "/answers",
