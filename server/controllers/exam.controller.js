@@ -71,7 +71,7 @@ export const insertQuestionInExam = async (req, res) => {
     try {
         const {question_score, id_question, id_exam} = req.body
         const [result] = await pool.query("INSERT INTO question_exam (question_score, id_question, id_exam) VALUES (?,?,?)", [question_score, id_question, id_exam])
-
+ 
         res.json(result)
     } catch (error) {
         return res.status(500).json({message: error.message})

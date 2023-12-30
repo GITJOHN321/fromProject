@@ -56,6 +56,7 @@ export const updateQuestion = async(req, res) => {
           "UPDATE questions SET ? WHERE id_question = ?",
           [req.body, req.params.id]
         );
+  
         res.json(result);
       } catch (error) {
         return res.status(500).json({ message: error.message });

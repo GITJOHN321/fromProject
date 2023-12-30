@@ -11,11 +11,39 @@ function ExamForm() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { createExam } = useExams();
-  const { Questions, getQuestion } = useQuestions();
+  const { createExam, insertQuestionExam } = useExams();
+  const { Questions, getQuestion, getQuestions, setActive } = useQuestions();
+
   const navigate = useNavigate();
   const [listQuestions, setListQuestions] = useState([]);
+  const [scores, setScores] = useState([0]);
+  const [maxScore, setMaxScore] = useState([0]);
 
+
+
+  const maxScores = (score, count) =>{
+    if(count === 0)setScores(score)
+    if (count > 0) {
+      setScores(score / count);
+    }
+    console.log(score + ": " + count);
+  }
+  
+  const handleScoreChange = (evt) => {
+    evt.preventDefault();
+    let score = evt.target.value;
+    let count = listQuestions.length;
+    setMaxScore(score)
+    maxScores(score, count)
+  };
+  //input Scores-----------------------------------------------------------------------
+  const handleFormChange = (index, event) => {
+    let data = [...listQuestions];
+    data[index][event.target.name] = event.target.value;
+    setListQuestions(data);
+  };
+
+  //drag on Drop -----------------------------------------------------------------------
   const dragingOver = (evt) => {
     evt.preventDefault();
   };
@@ -24,13 +52,30 @@ function ExamForm() {
     evt.preventDefault();
     const itemID = evt.dataTransfer.getData("itemID");
     const item = await getQuestion(parseInt(itemID));
+   
+    
     setListQuestions([...listQuestions, item]);
+    setActive(false);
+    maxScores(maxScore, listQuestions.length+1)
   };
+  //------------------------------------------------------------------------------------
+  const onSubmit = handleSubmit(async (data) => {
+    //insertId
 
-  const onSubmit = handleSubmit((data) => {
-    //createExam(data);
-   console.log(data)
-  
+    const examid = await createExam(data);
+    console.log(listQuestions[0].question_score);
+    listQuestions.map(async (question) => {
+      if (question.question_score === undefined) {
+        question.question_score = 0;
+      }
+      const data = {
+        question_score: Number(question.question_score),
+        id_question: Number(question.id_question),
+        id_exam: Number(examid.insertId),
+      };
+      await insertQuestionExam(data);
+    });
+    getQuestions();
   });
 
   return (
@@ -56,6 +101,7 @@ function ExamForm() {
               <label htmlFor="available_time">Tiempo Maximo (Minutos)</label>
               <input
                 type="number"
+                min="0"
                 {...register("available_time", { required: true })}
                 className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
                 placeholder="00"
@@ -65,25 +111,49 @@ function ExamForm() {
               <label htmlFor="max_score">Nota Maxima</label>
               <input
                 type="number"
+                min="0"
                 {...register("max_score", { required: true })}
+                onChange={(event) => handleScoreChange(event)}
                 className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
                 placeholder="00"
               />
             </div>
+
+            <label htmlFor="max_score">Nota Maxima</label>
           </div>
 
-          <button className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md" type="submit"> Save Exam </button>
+          <button
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
+            type="submit"
+          >
+            {" "}
+            Save Exam{" "}
+          </button>
         </form>
         <div
           droppable="true"
           onDragOver={(evt) => dragingOver(evt)}
           onDrop={(evt) => onDrop(evt, Questions)}
         >
-          {listQuestions.length<1 && (<h1>DRAG AND DROP</h1>)}
+          {listQuestions.length < 1 && <h1>DRAG AND DROP</h1>}
           {listQuestions.map((question, index) => (
             <div key={index}>
-              <h1 className="font-bold bg-slate-500 my-4">Pregunta {index + 1}</h1>
-              <QuestionCreateForm questions={question} enable = {true}></QuestionCreateForm>
+              <h1 className="font-bold bg-slate-500 my-4">
+                Pregunta {index + 1}
+              </h1>
+              <input
+                className="block w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+                type="text"
+                min="0"
+                name="question_score"
+                value={scores}
+                onChange={(event) => handleFormChange(index, event)}
+                required
+              />
+              <QuestionCreateForm
+                questions={question}
+                enable={true}
+              ></QuestionCreateForm>
             </div>
           ))}
         </div>

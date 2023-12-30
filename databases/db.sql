@@ -75,7 +75,7 @@ CREATE TABLE question_exam (
     FOREIGN KEY (id_exam) REFERENCES exams(id_exam)
 );
 --Lista de Preguntas en un examen
-SELECT question_exam.id_question, questions.title, question_exam.question_score FROM question_exam JOIN exams ON question_exam.id_exam = exams.id_exam JOIN questions ON question_exam.id_question = questions.id_question WHERE question_exam.id_exam = 1;
+SELECT question_exam.*, questions.title FROM question_exam JOIN exams ON question_exam.id_exam = exams.id_exam JOIN questions ON question_exam.id_question = questions.id_question ORDER BY question_exam.id_exam ASC WHERE question_exam.id_exam = 1 ;
 
 INSERT INTO question_exam (question_score, id_question, id_exam) VALUES (1.5,1,1)
 
