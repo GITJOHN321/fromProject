@@ -12,6 +12,8 @@ import {
   deleteAnswersRequest,
   refreshListAnswerRequest,
 } from "../api/answer.js";
+
+
 const QuestionContext = createContext();
 
 export const useQuestions = () => {
@@ -72,7 +74,6 @@ export function QuestionProvider({ children }) {
   };
   const updateQuestion = async (id, question) => {
     try {
-    
       await putQuestionsRequest(id, question_data);
     } catch (error) {
       console.error(error);
@@ -107,12 +108,14 @@ export function QuestionProvider({ children }) {
   };
   const refreshListAnswer = async (answerList, id) => {
     try {
-      const refreshAnswerList = { answers: answerList, id_question: id}
+      const refreshAnswerList = { answers: answerList, id_question: id };
       await refreshListAnswerRequest(refreshAnswerList);
     } catch (error) {
       console.error(error);
     }
   };
+
+
 
   return (
     <QuestionContext.Provider

@@ -3,7 +3,16 @@ import {pool} from "../db.js"
 export const getQuestions = async (req, res) => {
     try {
         const [result] = await pool.query("SELECT * FROM questions WHERE id_user = ? ORDER BY id_question DESC", [req.user.id])
-        
+      const list = []
+
+        for(let i = 0; i < result.length; i++){
+          const [sub] = await pool.query(
+            "select subcategories.id_subcategory, subcategories.name_subcategory, subcategories.id_category, categories.name_category from question_category JOIN subcategories ON question_category.id_subcategory = subcategories.id_subcategory JOIN categories ON categories.id_category = subcategories.id_category WHERE id_question = ?",
+            [result[i].id_question]
+          )
+          result[i].subcategories = [sub][0]
+        }
+        console.log(result)
         res.json(result)
     } catch (error) {
         return res.status(500).json({message: error.message})

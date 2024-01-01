@@ -1,7 +1,9 @@
+import { useEffect } from "react";
 import { useQuestions } from "../context/QuestionContext";
 import { Link } from "react-router-dom";
-function QuestionCard({ question }) {
+function QuestionCard({ question}) {
   const { deleteQuestion, updateForm ,setQuestion} = useQuestions();
+  
   
   const startDrag = (evt, item) => {
     evt.dataTransfer.setData("itemID", item.id_question);
@@ -12,6 +14,7 @@ function QuestionCard({ question }) {
     updateForm();
     setQuestion(question)
   }
+ 
   return (
     <div
       draggable
@@ -46,6 +49,12 @@ function QuestionCard({ question }) {
         className="text-slate-300"
         dangerouslySetInnerHTML={{ __html: question.body }}
       ></p>
+      {question.subcategories.map(sub => (
+      
+        <span key={sub.id_subcategory} className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-white">{sub.name_subcategory}</span>
+      ))}
+        
+      
       <p>{new Date(question.createdAt).toLocaleDateString()}</p>
     </div>
   );

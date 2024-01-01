@@ -19,28 +19,32 @@ function ExamForm() {
   const [scores, setScores] = useState([0]);
   const [maxScore, setMaxScore] = useState([0]);
 
-
-
-  const maxScores = (score, count) =>{
-    if(count === 0)setScores(score)
-    if (count > 0) {
-      setScores(score / count);
-    }
-    console.log(score + ": " + count);
-  }
-  
-  const handleScoreChange = (evt) => {
-    evt.preventDefault();
-    let score = evt.target.value;
-    let count = listQuestions.length;
-    setMaxScore(score)
-    maxScores(score, count)
+  //question listInputs-----------------------------------------------------------
+  const removeFields = (index) => {
+    let data = [...listQuestions];
+    data.splice(index, 1);
+    setListQuestions(data);
   };
-  //input Scores-----------------------------------------------------------------------
   const handleFormChange = (index, event) => {
     let data = [...listQuestions];
     data[index][event.target.name] = event.target.value;
     setListQuestions(data);
+  };
+  //input Scores-----------------------------------------------------------------------
+  const maxScores = (score, count) => {
+    if (count === 0) setScores(score);
+    if (count > 0) {
+      setScores(score / count);
+    }
+    console.log(score + ": " + count);
+  };
+
+  const handleScoreChange = (evt) => {
+    evt.preventDefault();
+    let score = evt.target.value;
+    let count = listQuestions.length;
+    setMaxScore(score);
+    maxScores(score, count);
   };
 
   //drag on Drop -----------------------------------------------------------------------
@@ -52,11 +56,9 @@ function ExamForm() {
     evt.preventDefault();
     const itemID = evt.dataTransfer.getData("itemID");
     const item = await getQuestion(parseInt(itemID));
-   
-    
     setListQuestions([...listQuestions, item]);
     setActive(false);
-    maxScores(maxScore, listQuestions.length+1)
+    maxScores(maxScore, listQuestions.length + 1);
   };
   //------------------------------------------------------------------------------------
   const onSubmit = handleSubmit(async (data) => {
@@ -126,8 +128,7 @@ function ExamForm() {
             className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
             type="submit"
           >
-            {" "}
-            Save Exam{" "}
+            Save Exam
           </button>
         </form>
         <div
@@ -138,18 +139,49 @@ function ExamForm() {
           {listQuestions.length < 1 && <h1>DRAG AND DROP</h1>}
           {listQuestions.map((question, index) => (
             <div key={index}>
-              <h1 className="font-bold bg-slate-500 my-4">
-                Pregunta {index + 1}
-              </h1>
-              <input
-                className="block w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
-                type="text"
-                min="0"
-                name="question_score"
-                value={scores}
-                onChange={(event) => handleFormChange(index, event)}
-                required
-              />
+              <div className="flex flex-row items-center">
+                <h1 className="block text-2xl w-full font-bold  my-4 basis-1/8">
+                  Pregunta {index + 1}
+                </h1>
+                <input
+                  className=" border-2 bg-zinc-800 border-red-500 hover:border-red-600 text-white px-4 text-center rounded-md my-2 basis-1/25 w-16 h-9"
+                  type="text"
+                  min="0"
+                  name="question_score"
+                  value={scores}
+                  onChange={(event) => handleFormChange(index, event)}
+                  required
+                  disabled
+                />
+                <button className="text-white px-4 py-2 rounded-md basis-1/25">
+                  <svg
+                    className="h-10  text-red-500 hover:text-red-600"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      removeFields(index);
+                    }}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="rounded"
+                    strokeLinejoin="rounded"
+                  >
+                    {" "}
+                    <rect
+                      x="3"
+                      y="3"
+                      width="18"
+                      height="18"
+                      rx="2"
+                      ry="2"
+                    />{" "}
+                    <line x1="9" y1="9" x2="15" y2="15" />{" "}
+                    <line x1="15" y1="9" x2="9" y2="15" />
+                  </svg>
+                </button>
+              </div>
+           
               <QuestionCreateForm
                 questions={question}
                 enable={true}
