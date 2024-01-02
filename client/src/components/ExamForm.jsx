@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useExams } from "../context/examContext";
+import { useExams } from "../context/ExamContext";
 import { useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useQuestions } from "../context/QuestionContext";
@@ -125,7 +125,7 @@ function ExamForm() {
           </div>
 
           <button
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
+            className="bg-fuchsia-800 hover:bg-fuchsia-900 text-white px-4 py-2 rounded-md"
             type="submit"
           >
             Save Exam
@@ -144,7 +144,7 @@ function ExamForm() {
                   Pregunta {index + 1}
                 </h1>
                 <input
-                  className=" border-2 bg-zinc-800 border-red-500 hover:border-red-600 text-white px-4 text-center rounded-md my-2 basis-1/25 w-16 h-9"
+                  className=" border-2 bg-zinc-800 border-fuchsia-600 hover:border-fuchsia-700 text-white px-4 text-center rounded-md my-2 basis-1/25 w-16 h-9"
                   type="text"
                   min="0"
                   name="question_score"
@@ -155,7 +155,7 @@ function ExamForm() {
                 />
                 <button className="text-white px-4 py-2 rounded-md basis-1/25">
                   <svg
-                    className="h-10  text-red-500 hover:text-red-600"
+                    className="h-10  text-fuchsia-600 hover:text-fuchsia-700"
                     onClick={(e) => {
                       e.preventDefault();
                       removeFields(index);
@@ -181,7 +181,7 @@ function ExamForm() {
                   </svg>
                 </button>
               </div>
-           
+
               <QuestionCreateForm
                 questions={question}
                 enable={true}

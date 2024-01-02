@@ -2,7 +2,8 @@ import { useForm } from "react-hook-form";
 import { useQuestions } from "../context/QuestionContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-
+import { useCategories } from "../context/CategoryContext";
+import Dropdown from "./DropDown";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
@@ -18,7 +19,8 @@ function QuestionCreateForm({ questions, enable }) {
   } = useQuestions();
   const navigate = useNavigate();
   const params = useParams();
-
+  const { getCategories, categories, getSubcategories, subcategories } =
+    useCategories();
   //dinamic InputFields--------------------------------
   const [inputFields, setInputFields] = useState([
     { body_answer: "", done: 0 },
@@ -59,7 +61,7 @@ function QuestionCreateForm({ questions, enable }) {
         setInputFields(list);
       }
     }
-
+    getCategories();
     loadQuestion();
   }, []);
 
@@ -105,6 +107,7 @@ function QuestionCreateForm({ questions, enable }) {
     <div className="bg-zinc-800  ">
       {!questions && <h1 className="my-2">New Question</h1>}
       <form onSubmit={onSubmit}>
+        
         <label htmlFor="title">Title</label>
         <input
           placeholder="title"
@@ -116,6 +119,7 @@ function QuestionCreateForm({ questions, enable }) {
         />
 
         <label htmlFor="body">Description</label>
+        <div className="relative">
         <ReactQuill
           theme="snow"
           name="body"
@@ -123,6 +127,8 @@ function QuestionCreateForm({ questions, enable }) {
           onChange={setDescription}
           placeholder="Write a Description please..."
         ></ReactQuill>
+        </div>
+        
 
         <label>Answers</label>
         {inputFields.map((inputField, index) => (
@@ -140,7 +146,7 @@ function QuestionCreateForm({ questions, enable }) {
                 e.preventDefault();
                 removeFields(index);
               }}
-              className="absolute top-0 end-11 p-2.5 h-full text-sm font-medium text-white bg-blue-700  hover:bg-blue-800  dark:bg-blue-600"
+              className="absolute top-0 end-11 p-2.5 h-full text-sm font-medium text-white bg-sky-600  hover:bg-sky-700"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +165,7 @@ function QuestionCreateForm({ questions, enable }) {
             </button>
             <button
               onClick={addFields}
-              className="absolute top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-red-700 rounded-e-lg  hover:bg-red-800  dark:bg-red-600"
+              className="absolute top-0 end-0 p-2.5 h-full text-sm font-medium text-white  rounded-e-lg bg-fuchsia-800 hover:bg-fuchsia-900  "
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -178,7 +184,17 @@ function QuestionCreateForm({ questions, enable }) {
             </button>
           </div>
         ))}
-        <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">{enable === true? "Update Question": "Save"}</button>
+        <div className="grid grid-cols-2">
+          <div className="col col-span1">
+            <Dropdown list={categories}></Dropdown>
+          </div>
+          <div className="col col-span1">
+            <Dropdown list={subcategories}></Dropdown>
+          </div>
+        </div>
+        <button className="bg-sky-600  hover:bg-sky-700 text-white px-4 py-2 rounded-md">
+          {enable === true ? "Update Question" : "Save"}
+        </button>
       </form>
     </div>
   );

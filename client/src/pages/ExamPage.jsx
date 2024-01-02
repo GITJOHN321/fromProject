@@ -1,7 +1,8 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useQuestions } from "../context/QuestionContext";
 import QuestionCard from "../components/QuestionCard";
 import QuestionCreateForm from "../components/QuestionCreateForm";
+import CategoryForm from "../components/CategoryForm";
 import ExamForm from "../components/ExamForm";
 import { Link } from "react-router-dom";
 
@@ -19,7 +20,6 @@ function ExamPage() {
   const [CategoryActive, setCategoryActive] = useState(false);
 
   const resetCategory = () => {
-    
     setActive(false);
     setCategoryActive(!CategoryActive);
   };
@@ -32,7 +32,6 @@ function ExamPage() {
 
   useEffect(() => {
     getQuestions();
-  
   }, []);
   return (
     <>
@@ -41,7 +40,7 @@ function ExamPage() {
         onClick={() => {
           resetForm();
         }}
-        className="bg-blue-500 border-2 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+        className="bg-sky-600 border-2  hover:bg-sky-700 text-white px-4 py-2 rounded-md"
       >
         Add
       </Link>
@@ -50,7 +49,7 @@ function ExamPage() {
         onClick={() => {
           resetCategory();
         }}
-        className="bg-blue-500 border-2  hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+        className="bg-sky-600 border-2  hover:bg-sky-700 text-white px-4 py-2 rounded-md"
       >
         Add Category
       </Link>
@@ -64,9 +63,12 @@ function ExamPage() {
       {Active === false && null}
 
       {CategoryActive === true && Active === false && (
-        <div className="h-[500px]">categoryForm</div>
+        <div className=" flex  items-center justify-center">
+          <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md">
+            <CategoryForm></CategoryForm>
+          </div>
+        </div>
       )}
-
 
       <div className="h-screen grid grid-flow-row md:grid-cols-3 gap-4 ">
         <div className="row-span-2 col-span-2 md:col-span-1  overflow-auto touch-pan-y">

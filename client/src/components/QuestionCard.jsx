@@ -26,7 +26,7 @@ function QuestionCard({ question}) {
 
         <div className="flex flex-nowrap gap-x-1 items-center">
           <button
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
+            className="bg-fuchsia-800 hover:bg-fuchsia-900 text-white px-4 py-2 rounded-md"
             onClick={() => {
               console.log(question.id_question);
               deleteQuestion(question.id_question);
@@ -39,7 +39,7 @@ function QuestionCard({ question}) {
             onClick={() => {
               sendEdit(question)
             }}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+            className="bg-sky-600  hover:bg-sky-700 text-white px-4 py-2 rounded-md"
           >
             Edit
           </Link>
