@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { createExamRequest, examQuestionRequest } from "../api/exam.js";
+import { createExamRequest, examQuestionRequest, getExamsRequest } from "../api/exam.js";
 
 const ExamContext = createContext();
 
@@ -14,6 +14,14 @@ export const useExams = () => {
 export function ExamProvider({ children }) {
   const [Exams, setExams] = useState([]);
 
+  const getExams = async() =>{
+    try {
+      const res = await getExamsRequest()
+      setExams(res.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
   const createExam = async (question) => {
     try {
       const newData = {
@@ -39,7 +47,7 @@ export function ExamProvider({ children }) {
   }
 
   return (
-    <ExamContext.Provider value={{ createExam, insertQuestionExam }}>
+    <ExamContext.Provider value={{ createExam, insertQuestionExam, getExams, Exams }}>
       {children}
     </ExamContext.Provider>
   );

@@ -76,6 +76,10 @@ export const updateQuestion = async (req, res) => {
 };
 export const deleteQuestion = async (req, res) => {
   try {
+    const delete_categorys = await pool.query(
+      "DELETE FROM question_category WHERE id_question = ?",
+      [req.params.id]
+    );
     const delete_answer = await pool.query(
       "DELETE FROM answers WHERE question_id = ?",
       [req.params.id]

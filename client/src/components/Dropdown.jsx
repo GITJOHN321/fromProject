@@ -35,7 +35,7 @@ function Dropdown({ list, name }) {
       <div className="z-10 relative flex flex-col items-center">
         <button
           onClick={(e) => onsubmit(e)}
-          className="bg-fuchsia-800 hover:bg-fuchsia-900 border-2 flex items-center text-white px-4 py-2 mt-2 rounded-md w-full"
+          className="bg-sky-600  hover:bg-sky-500 border-2 flex items-center text-white px-4 py-2 mt-2 rounded-md w-full"
         >
           {Name}
           {!isOpen ? (
@@ -45,11 +45,11 @@ function Dropdown({ list, name }) {
           )}
         </button>
         {isOpen && (
-          <div className="absolute top-16 flex flex-col tiems-start rounded-lg p-2 w-full bg-zinc-500">
+          <div className="absolute top-16 flex flex-col tiems-start rounded-lg py-2 w-full bg-slate-100 border-blue-200 border-2 shadow-lg">
             {list.map((e, i) => (
               <button
                 onClick={(evt) => onClickOption(evt, e)}
-                className="flex w-full justify-between hover:bg-zinc-600 cursor-pointer rounded-lg p-2"
+                className="flex w-full justify-between hover:bg-blue-200 cursor-pointer  p-2"
                 key={i}
               >
                 {e.name_category && <h3>{e.name_category}</h3>}

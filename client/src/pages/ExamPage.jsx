@@ -55,7 +55,7 @@ function ExamPage() {
       </Link>
       {Active === true && (
         <div className=" flex  items-center justify-center">
-          <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md">
+          <div className="py-8 my-2 bg-slate-100 rounded-lg">
             <QuestionCreateForm questions={Question}></QuestionCreateForm>
           </div>
         </div>
@@ -64,7 +64,7 @@ function ExamPage() {
 
       {CategoryActive === true && Active === false && (
         <div className=" flex  items-center justify-center">
-          <div className="bg-zinc-800 max-w-md w-full p-10 rounded-md">
+          <div className="py-8 my-2 bg-slate-100 rounded-lg">
             <CategoryForm></CategoryForm>
           </div>
         </div>

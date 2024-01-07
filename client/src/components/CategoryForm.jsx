@@ -47,24 +47,25 @@ function CategoryForm() {
   });
   return (
     <div className="flex items-center justify-center">
-      <div className="bg-zinc-800 w-full p-10 rounded-md">
-        <h1 className="text-2xl font-bold">New Category</h1>
-        <form onSubmit={onSubmit}>
+      <div className="bg-slate-100 rounded-lg ">
+      <h1 className="head px-10 mb-5 font-bold text-2xl">New Question</h1>
+        <form className="px-10" onSubmit={onSubmit}>
           <input
             type="text"
             {...register("name_category", { required: true })}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+            className="w-full input px-4 py-2 rounded-md my-2"
             placeholder="Name Category"
           />
-          <label htmlFor="">Subcategories</label>
+          <label className="text-xl font-bold" htmlFor="">Subcategories:</label>
           {inputFields.map((inputField, index) => (
             <div key={index} className="relative w-full">
               <input
-                className="block w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+                className="block w-full input px-4 py-2 rounded-md my-2"
                 type="text"
                 name="name_subcategory"
                 value={inputField.name_subcategory}
                 onChange={(event) => handleFormChange(index, event)}
+                placeholder="subcategory"
                 required
               />
               <button
@@ -72,7 +73,7 @@ function CategoryForm() {
                   e.preventDefault();
                   removeFields(index);
                 }}
-                className="absolute top-0 end-11 p-2.5 h-full text-sm font-medium text-white bg-sky-600  hover:bg-sky-700"
+                className="absolute top-0 end-11 px-2.5 h-full text-sm font-medium border-2 border-sky-800 bg-sky-100 hover:bg-sky-200 hover:border-sky-900 text-sky-900"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -91,7 +92,7 @@ function CategoryForm() {
               </button>
               <button
                 onClick={addFields}
-                className="absolute top-0 end-0 p-2.5 h-full text-sm font-medium text-white  rounded-e-lg bg-fuchsia-800 hover:bg-fuchsia-900  "
+                className="absolute top-0 end-0 px-2.5 h-full font-medium   rounded-e-lg  border-2 border-sky-800 bg-sky-600  hover:bg-sky-500 text-white"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -111,7 +112,7 @@ function CategoryForm() {
             </div>
           ))}
           <button
-            className="bg-fuchsia-800 hover:bg-fuchsia-900 text-white px-4 py-2 rounded-md"
+            className="bg-sky-600  hover:bg-sky-500 text-white px-4 mt-3 py-2 rounded-md"
             type="submit"
           >
             Save

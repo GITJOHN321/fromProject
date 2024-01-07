@@ -1,8 +1,51 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-body{
-    background: #202020;
-    color: white;
+:root {
+    --color1: #001336;
+    --color2: #007cc4;
+    --color3: #bfdbfe;
+    --color4: #f1f5f9;
+    --color5: rgb(61, 139, 255);
+  }
+.head{
+    background-color: var(--color1);
+    color: var(--color4);
+    position: relative;
 }
+
+.nav{
+    background-color: var(--color1);
+    color: var(--color4);
+}
+
+.sub{
+    font-size: medium;
+    color: var(--color1);
+}
+.input{
+    background-color: var(--color3);
+    color: var(--color1);
+}  
+.input::placeholder {
+    color: var(--color5);
+    opacity: 1; /* Firefox */
+  }
+  
+  .input::-ms-input-placeholder { /* Edge 12 -18 */
+    color: var(--color5);
+  }
+@layer utilities{
+    .head::after{
+        @apply content-[''] bg-sky-500 h-[100%] w-[5%] lg:w-[3%] left-0 -top-[0px] absolute 
+    }
+    .tag{
+        @apply  bg-blue-100 text-blue-800 text-sm font-medium  w-full px-1 mx-0.5 py-1 my-0.5 rounded dark:bg-[#001336] dark:text-white cursor-pointer text-nowrap text-center hover:bg-[#007cc4]
+    }
+} 
+body{
+    background: #bfdbfe;
+    color: #111827;
+
+}
+

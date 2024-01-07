@@ -8,7 +8,7 @@ import Dropdown from "./DropDown";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-function QuestionCreateForm({ questions, enable }) {
+function QuestionCreateForm({ questions}) {
   const { register, handleSubmit, setValue } = useForm();
   const {
     createQuestion,
@@ -72,7 +72,7 @@ function QuestionCreateForm({ questions, enable }) {
         question.answers.map((answer) => {
           list.push(answer);
         });
-        setListSubCategories(question.subcategories)
+        setListSubCategories(question.subcategories);
         setInputFields(list);
       }
     }
@@ -94,7 +94,7 @@ function QuestionCreateForm({ questions, enable }) {
         //controller List inputs answers --------------------------------------------
 
         refreshListAnswer(inputFields, id);
-        subcategoriesQuestion(listSubCategories, id)
+        subcategoriesQuestion(listSubCategories, id);
         //----------------------------------------------------------------------
       }
       updateQuestionAndAnswers();
@@ -103,7 +103,7 @@ function QuestionCreateForm({ questions, enable }) {
     } else {
       //validate description is empty with regex-----------
       const regex = /^\s*$/;
-      if (regex.test(description)  || listSubCategories.length <= 0) {
+      if (regex.test(description) || listSubCategories.length <= 0) {
         console.log(false);
         return;
       } else {
@@ -114,7 +114,7 @@ function QuestionCreateForm({ questions, enable }) {
         const idQuestion = await createQuestion(question_data);
         refreshListAnswer(inputFields, idQuestion.insertId);
 
-        subcategoriesQuestion(listSubCategories, idQuestion.insertId)
+        subcategoriesQuestion(listSubCategories, idQuestion.insertId);
       }
     }
 
@@ -122,21 +122,21 @@ function QuestionCreateForm({ questions, enable }) {
     await getQuestions();
   });
   return (
-    <div className="bg-zinc-800  ">
-      {!questions && <h1 className="my-2">New Question</h1>}
-      <form onSubmit={onSubmit}>
-        <label htmlFor="title">Title</label>
+    <div className="bg-slate-100 rounded-lg  ">
+      {!questions && <h1 className="head px-10 font-bold text-2xl">New Question</h1>}
+      <form className="px-10" onSubmit={onSubmit}>
+        <label className="text-lg" htmlFor="title">Title:</label>
         <input
           placeholder="title"
           type="text"
           {...register("title")}
-          className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+          className="w-full input px-4 py-2 rounded-md my-2"
           autoFocus
           required
         />
 
         <label htmlFor="body">Description</label>
-        <div className="relative">
+        <div className="relative border-2 ">
           <ReactQuill
             theme="snow"
             name="body"
@@ -150,7 +150,7 @@ function QuestionCreateForm({ questions, enable }) {
         {inputFields.map((inputField, index) => (
           <div key={index} className="relative w-full">
             <input
-              className="block w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+              className="block w-full input px-4 py-2 rounded-md my-2"
               type="text"
               name="body_answer"
               value={inputField.body_answer}
@@ -162,7 +162,7 @@ function QuestionCreateForm({ questions, enable }) {
                 e.preventDefault();
                 removeFields(index);
               }}
-              className="absolute top-0 end-11 p-2.5 h-full text-sm font-medium text-white bg-sky-600  hover:bg-sky-700"
+              className="absolute top-0 end-11 px-2.5 h-full text-sm font-medium border-2 border-sky-800 bg-sky-100 hover:bg-sky-200 hover:border-sky-900 text-sky-900"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -181,7 +181,7 @@ function QuestionCreateForm({ questions, enable }) {
             </button>
             <button
               onClick={addFields}
-              className="absolute top-0 end-0 p-2.5 h-full text-sm font-medium text-white  rounded-e-lg bg-fuchsia-800 hover:bg-fuchsia-900  "
+              className="absolute top-0 end-0 px-2.5 h-full font-medium   rounded-e-lg  border-2 border-sky-800 bg-sky-600  hover:bg-sky-500 text-white "
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -212,22 +212,35 @@ function QuestionCreateForm({ questions, enable }) {
         <div className="py-2">
           <h1 className="text-xl font-bold pb-2">Subcategories:</h1>
           <div className="grid grid-cols-4">
-            {listSubCategories.map((e, index) => (
-              <span
-                onClick={(e) => {
-                  e.preventDefault();
-                  removeSubcategories(index);
-                }}
-                key={e.id_subcategory}
-                className="flex text-center"
-              >
-                <SubcategoryTag name={e.name_subcategory}></SubcategoryTag>
-              </span>
-            ))}
+            {questions
+              ? questions.subcategories.map((e, index) => (
+                  <span
+                    onClick={(e) => {
+                      e.preventDefault();
+                      removeSubcategories(index);
+                    }}
+                    key={e.id_subcategory}
+                    className="flex text-center"
+                  >
+                    <SubcategoryTag name={e.name_subcategory}></SubcategoryTag>
+                  </span>
+                ))
+              : listSubCategories.map((e, index) => (
+                  <span
+                    onClick={(e) => {
+                      e.preventDefault();
+                      removeSubcategories(index);
+                    }}
+                    key={e.id_subcategory}
+                    className="flex text-center"
+                  >
+                    <SubcategoryTag name={e.name_subcategory}></SubcategoryTag>
+                  </span>
+                ))}
           </div>
         </div>
-        <button className="bg-sky-600  hover:bg-sky-700 text-white px-4 py-2 rounded-md">
-          {enable === true ? "Update Question" : "Save"}
+        <button className="bg-sky-600  hover:bg-sky-500 text-white px-4 py-2 rounded-md">
+          {questions? "Update Question" : "Save"}
         </button>
       </form>
     </div>

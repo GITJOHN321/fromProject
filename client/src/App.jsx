@@ -17,8 +17,9 @@ function App() {
         <ExamProvider>
           <QuestionProvider>
             <BrowserRouter>
+            <Navbar></Navbar>
               <main className="container mx-auto px-10">
-                <Navbar></Navbar>
+                
                 <Routes>
                   <Route path="/" element={<HomePage />} />
                   <Route path="/login" element={<LoginPage />} />

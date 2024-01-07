@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useQuestions } from "../context/QuestionContext";
 import QuestionCreateForm from "../components/QuestionCreateForm";
+import QuestionExamCard from "./QuestionExamCard";
 
 function ExamForm() {
   const {
@@ -67,11 +68,8 @@ function ExamForm() {
     const examid = await createExam(data);
     console.log(listQuestions[0].question_score);
     listQuestions.map(async (question) => {
-      if (question.question_score === undefined) {
-        question.question_score = 0;
-      }
       const data = {
-        question_score: Number(question.question_score),
+        question_score: scores,
         id_question: Number(question.id_question),
         id_exam: Number(examid.insertId),
       };
@@ -82,20 +80,20 @@ function ExamForm() {
 
   return (
     <div className="flex items-center justify-center">
-      <div className="bg-zinc-800 w-full p-10 rounded-md">
-        <h1 className="text-2xl font-bold">Encabezado de Examen</h1>
-        <form onSubmit={onSubmit}>
+      <div className="bg-slate-100 w-full py-10 rounded-md shadow-lg">
+        <h1 className="text-2xl px-10 font-bold head">Encabezado de Examen</h1>
+        <form className="px-10" onSubmit={onSubmit}>
           <input
             type="text"
             {...register("name_exam", { required: true })}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+            className="input w-full px-4 py-2 rounded-md my-2  "
             placeholder="Title Exam"
           />
 
           <input
             type="text"
             {...register("body_exam", { required: true })}
-            className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+            className="input w-full bg-blue-300 placeholder-white text-white px-4 py-2 rounded-md my-2"
             placeholder="Description..."
           />
           <div className=" grid grid-flow-row sm:grid-cols-2 gap-4 ">
@@ -105,7 +103,7 @@ function ExamForm() {
                 type="number"
                 min="0"
                 {...register("available_time", { required: true })}
-                className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+                className="input w-full bg-blue-300 placeholder-white text-white px-4 py-2 rounded-md my-2"
                 placeholder="00"
               />
             </div>
@@ -116,16 +114,16 @@ function ExamForm() {
                 min="0"
                 {...register("max_score", { required: true })}
                 onChange={(event) => handleScoreChange(event)}
-                className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
+                className="input w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
                 placeholder="00"
               />
             </div>
 
-            <label htmlFor="max_score">Nota Maxima</label>
+            
           </div>
 
           <button
-            className="bg-fuchsia-800 hover:bg-fuchsia-900 text-white px-4 py-2 rounded-md"
+            className="bg-sky-600 hover:bg-sky-500 text-white px-4 py-2 rounded-md"
             type="submit"
           >
             Save Exam
@@ -136,7 +134,7 @@ function ExamForm() {
           onDragOver={(evt) => dragingOver(evt)}
           onDrop={(evt) => onDrop(evt, Questions)}
         >
-          {listQuestions.length < 1 && <h1>DRAG AND DROP</h1>}
+          {listQuestions.length < 1 && <div className="px-10 py-5 "><div className="bg-blue-200 py-5 rounded-lg border-4 border-dashed border-sky-800 text-center text-sky-500 transition hover:scale-105 duration-300">DRAG AND DROP</div></div>}
           {listQuestions.map((question, index) => (
             <div key={index}>
               <div className="flex flex-row items-center">
@@ -155,7 +153,7 @@ function ExamForm() {
                 />
                 <button className="text-white px-4 py-2 rounded-md basis-1/25">
                   <svg
-                    className="h-10  text-fuchsia-600 hover:text-fuchsia-700"
+                    className="h-10  text-sky-600 hover:text-sky-700"
                     onClick={(e) => {
                       e.preventDefault();
                       removeFields(index);
@@ -182,10 +180,9 @@ function ExamForm() {
                 </button>
               </div>
 
-              <QuestionCreateForm
-                questions={question}
-                enable={true}
-              ></QuestionCreateForm>
+              <QuestionExamCard question={question} index={index+1}>
+
+              </QuestionExamCard>
             </div>
           ))}
         </div>
