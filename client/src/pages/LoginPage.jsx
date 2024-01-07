@@ -9,11 +9,14 @@ function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { signin, errors: signinErrors, isAuthenticated } = useAuth();
+  const { signin, errors: signinErrors, isAuthenticated, resetErrors } = useAuth();
   const navigate = useNavigate();
 
   const onSubmit = handleSubmit((data) => {
-    signin(data);
+    const login = signin(data);
+    if(login){
+      resetErrors()
+    }
   });
   useEffect(() => {
     if (isAuthenticated) navigate("/create-exam");

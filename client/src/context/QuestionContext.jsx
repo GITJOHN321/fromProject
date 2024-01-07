@@ -74,7 +74,7 @@ export function QuestionProvider({ children }) {
   };
   const updateQuestion = async (id, question) => {
     try {
-      await putQuestionsRequest(id, question_data);
+      await putQuestionsRequest(id, question);
     } catch (error) {
       console.error(error);
     }

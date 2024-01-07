@@ -3,6 +3,7 @@ import { useQuestions } from "../context/QuestionContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useCategories } from "../context/CategoryContext";
+import SubcategoryTag from "./SubcategoryTag";
 import Dropdown from "./DropDown";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -19,8 +20,21 @@ function QuestionCreateForm({ questions, enable }) {
   } = useQuestions();
   const navigate = useNavigate();
   const params = useParams();
-  const { getCategories, categories, getSubcategories, subcategories } =
-    useCategories();
+  const {
+    getCategories,
+    categories,
+    listSubCategories,
+    setListSubCategories,
+    subcategories,
+    subcategoriesQuestion,
+  } = useCategories();
+
+  const removeSubcategories = (index) => {
+    let data = [...listSubCategories];
+    data.splice(index, 1);
+    setListSubCategories(data);
+  };
+
   //dinamic InputFields--------------------------------
   const [inputFields, setInputFields] = useState([
     { body_answer: "", done: 0 },
@@ -56,8 +70,9 @@ function QuestionCreateForm({ questions, enable }) {
         setValue("title", question.title);
         setDescription(question.body);
         question.answers.map((answer) => {
-          list.push({ body_answer: answer.body_answer });
+          list.push(answer);
         });
+        setListSubCategories(question.subcategories)
         setInputFields(list);
       }
     }
@@ -79,15 +94,16 @@ function QuestionCreateForm({ questions, enable }) {
         //controller List inputs answers --------------------------------------------
 
         refreshListAnswer(inputFields, id);
-
+        subcategoriesQuestion(listSubCategories, id)
         //----------------------------------------------------------------------
       }
       updateQuestionAndAnswers();
       setActive(false);
       getQuestions();
     } else {
+      //validate description is empty with regex-----------
       const regex = /^\s*$/;
-      if (regex.test(description)) {
+      if (regex.test(description)  || listSubCategories.length <= 0) {
         console.log(false);
         return;
       } else {
@@ -97,6 +113,8 @@ function QuestionCreateForm({ questions, enable }) {
         };
         const idQuestion = await createQuestion(question_data);
         refreshListAnswer(inputFields, idQuestion.insertId);
+
+        subcategoriesQuestion(listSubCategories, idQuestion.insertId)
       }
     }
 
@@ -107,7 +125,6 @@ function QuestionCreateForm({ questions, enable }) {
     <div className="bg-zinc-800  ">
       {!questions && <h1 className="my-2">New Question</h1>}
       <form onSubmit={onSubmit}>
-        
         <label htmlFor="title">Title</label>
         <input
           placeholder="title"
@@ -120,15 +137,14 @@ function QuestionCreateForm({ questions, enable }) {
 
         <label htmlFor="body">Description</label>
         <div className="relative">
-        <ReactQuill
-          theme="snow"
-          name="body"
-          value={description}
-          onChange={setDescription}
-          placeholder="Write a Description please..."
-        ></ReactQuill>
+          <ReactQuill
+            theme="snow"
+            name="body"
+            value={description}
+            onChange={setDescription}
+            placeholder="Write a Description please..."
+          ></ReactQuill>
         </div>
-        
 
         <label>Answers</label>
         {inputFields.map((inputField, index) => (
@@ -184,12 +200,30 @@ function QuestionCreateForm({ questions, enable }) {
             </button>
           </div>
         ))}
+
         <div className="grid grid-cols-2">
           <div className="col col-span1">
-            <Dropdown list={categories}></Dropdown>
+            <Dropdown list={categories} name={"category"}></Dropdown>
           </div>
           <div className="col col-span1">
-            <Dropdown list={subcategories}></Dropdown>
+            <Dropdown list={subcategories} name={"subcategory"}></Dropdown>
+          </div>
+        </div>
+        <div className="py-2">
+          <h1 className="text-xl font-bold pb-2">Subcategories:</h1>
+          <div className="grid grid-cols-4">
+            {listSubCategories.map((e, index) => (
+              <span
+                onClick={(e) => {
+                  e.preventDefault();
+                  removeSubcategories(index);
+                }}
+                key={e.id_subcategory}
+                className="flex text-center"
+              >
+                <SubcategoryTag name={e.name_subcategory}></SubcategoryTag>
+              </span>
+            ))}
           </div>
         </div>
         <button className="bg-sky-600  hover:bg-sky-700 text-white px-4 py-2 rounded-md">

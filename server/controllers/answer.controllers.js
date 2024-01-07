@@ -51,52 +51,37 @@ export const updateAnswer = async (req, res) => {
 };
 export const updateListAnswer = async (req, res) => {
   try {
-    const { answers, id_question } = req.body;
-   if(Array.isArray(answers)){
     let list = [];
-    const [answersActual] = await pool.query(
+    const { answers, id_question } = req.body;
+    const [result] = await pool.query(
       "SELECT * FROM answers WHERE question_id = ?",
       [id_question]
     );
 
-    answersActual.map((elemento) => {
-      list.push(elemento.id_answer);
+    answers.map((e) => {
+      e.id_answer ? list.push(e.id_answer) : null;
     });
-    
-    console.log(answers)
 
-    answers.map(async (answer, lister) => {
-      if (!answer.id_answer) {
-        try {
-          await pool.query(
-            "INSERT INTO answers(body_answer ,question_id, done) VALUES (?,?,?)",
-            [answer.body_answer, id_question, answer.done]
-          );
-          console.log({create: answer})
-        } catch (error) {
-          console.error(error);
-        }
-      } else if (answer.id_answer) {
-        if (answers.length < answersActual.length) {
-          if (list.includes(answer.id_answer)) {
-            await pool.query("DELETE FROM answers WHERE id_answer = ?", [
-              answer.id_answer,
-            ]);
-            console.log("eliminar: " + answer.id_answer);
-          }
-        } else {
-          await pool.query("UPDATE answers SET ? WHERE  id_answer = ? ", [
-            answer,
-            answer.id_answer,
-          ]);
-          console.log("actualizar: " + answer.id_answer);
-        }
+    answers.map(async (e) => {
+      if (!e.id_answer) {
+        await pool.query(
+          "INSERT INTO answers(body_answer ,question_id, done) VALUES (?,?,?)",
+          [e.body_answer, id_question, e.done]
+        );
+      } else {
+        result.map(async (elemento) => {
+          !list.includes(elemento.id_answer)
+            ? await pool.query("DELETE FROM answers WHERE id_answer = ?", [
+                elemento.id_answer,
+              ])
+            : await pool.query("UPDATE answers SET ? WHERE  id_answer = ? ", [
+                e,
+                e.id_answer,
+              ]);
+        });
       }
     });
-    res.status(201).json({message: "list update" });
-   }else{
-    return res.status(500).json({ message: "receive a array"});
-   }
+
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

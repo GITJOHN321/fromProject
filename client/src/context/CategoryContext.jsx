@@ -5,7 +5,7 @@ import {
 } from "../api/Category.js";
 import {
   refreshSubcategorListRequest,
-  getSubcategoriesRequest,
+  getSubcategoriesRequest, intoSubcategoriQuestionRequest
 } from "../api/subcategory.js";
 
 const CategoryContext = createContext();
@@ -22,6 +22,8 @@ export const useCategories = () => {
 export function CategoryProvider({ children }) {
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
+  const [listCategories, setListCategories] = useState([]);
+  const [listSubCategories, setListSubCategories] = useState([]);
 
   const createCategory = async (category) => {
     try {
@@ -42,9 +44,8 @@ export function CategoryProvider({ children }) {
   };
   const getSubcategories = async (id) => {
     try {
-      
       const res = await getSubcategoriesRequest(id);
-      console.log(id)
+
       setSubcategories(res.data);
       return res.data;
     } catch (error) {
@@ -63,6 +64,16 @@ export function CategoryProvider({ children }) {
     }
   };
 
+  const subcategoriesQuestion = async (list_subcategories, id_question) => {
+    try {
+  
+      const data = { id_question: id_question, listSubcategories: list_subcategories}
+      await intoSubcategoriQuestionRequest(data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <CategoryContext.Provider
       value={{
@@ -72,6 +83,11 @@ export function CategoryProvider({ children }) {
         getCategories,
         getSubcategories,
         subcategories,
+        listCategories,
+        setListCategories,
+        listSubCategories,
+        setListSubCategories,
+        subcategoriesQuestion
       }}
     >
       {children}

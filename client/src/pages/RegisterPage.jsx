@@ -8,7 +8,7 @@ function RegisterPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { signup, isAuthenticated, errors: RegisterErrors } = useAuth();
+  const { signup, isAuthenticated, errors: RegisterErrors, resetErrors} = useAuth();
   const navigation = useNavigate();
 
   useEffect(() => {
@@ -16,7 +16,12 @@ function RegisterPage() {
   }, [isAuthenticated]);
 
   const onSubmit = handleSubmit(async (values) => {
-    signup(values);
+    const data = await signup(values);
+    if(data){
+      navigation("/login")
+      resetErrors()
+    }
+    
   });
 
   return (

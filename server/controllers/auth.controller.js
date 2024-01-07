@@ -35,7 +35,7 @@ export const login = async (req, res) => {
       "SELECT * FROM users WHERE email = ?",
       [email]
     );
-
+ 
     if (!userFound[0]) return res.status(400).json(["User not found"]);
 
     const isMatch = await bcrypt.compare(password, userFound[0].password);

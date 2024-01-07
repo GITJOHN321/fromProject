@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useQuestions } from "../context/QuestionContext";
 import { Link } from "react-router-dom";
+import SubcategoryTag from "./SubcategoryTag";
 function QuestionCard({ question}) {
   const { deleteQuestion, updateForm ,setQuestion} = useQuestions();
   
@@ -51,7 +52,7 @@ function QuestionCard({ question}) {
       ></p>
       {question.subcategories.map(sub => (
       
-        <span key={sub.id_subcategory} className="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-white">{sub.name_subcategory}</span>
+        <SubcategoryTag key={sub.id_subcategory} name={sub.name_subcategory}></SubcategoryTag>
       ))}
         
       
