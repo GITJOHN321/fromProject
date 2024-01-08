@@ -78,6 +78,20 @@ function ExamPage() {
               key={question.id_question}
             ></QuestionCard>
           ))}
+          {Questions.length < 1 && (
+            <div className="px-10 py-5 ">
+              <Link
+                to={`/create-exam`}
+                onClick={() => {
+                  resetCategory();
+                }}
+              >
+                <div className="bg-blue-200 py-5 rounded-lg border-4 border-dashed border-sky-800 text-center text-sky-500 transition hover:scale-105 duration-300 w-full">
+                  ADD CATEGORY FOR CREATE A QUESTION
+                </div>
+              </Link>
+            </div>
+          )}
         </div>
         <div className=" row-span-2 col-span-2 ">
           <ExamForm></ExamForm>
