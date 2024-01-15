@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
   const logout = () =>{
-    Cookies.remove("token")
+    Cookies.remove("token") 
     setIsAuthenticated(false)
     setUser(null)
   }

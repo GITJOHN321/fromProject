@@ -4,8 +4,10 @@ import {
   getCategoriesRequest,
 } from "../api/Category.js";
 import {
-  refreshSubcategorListRequest,
-  getSubcategoriesRequest, intoSubcategoriQuestionRequest
+  getSubcategoriesRequest,
+  intoSubcategoriQuestionRequest,
+  createSubCategoryRequest,
+  deleteSubcategoryRequest,
 } from "../api/subcategory.js";
 
 const CategoryContext = createContext();
@@ -24,13 +26,20 @@ export function CategoryProvider({ children }) {
   const [subcategories, setSubcategories] = useState([]);
   const [listCategories, setListCategories] = useState([]);
   const [listSubCategories, setListSubCategories] = useState([]);
+  const [categoryErrors, setCategoryErrors] = useState(null);
+
+  const resetErrors = () => {
+    setCategoryErrors(null);
+  };
+
+  //methods category-----------------------------------------------------------------
 
   const createCategory = async (category) => {
     try {
       const res = await createCategoryRequest(category);
       return res.data;
     } catch (error) {
-      console.error(error);
+      setCategoryErrors(error.response.data);
     }
   };
   const getCategories = async () => {
@@ -42,6 +51,22 @@ export function CategoryProvider({ children }) {
       console.error(error);
     }
   };
+
+  //methods Subcategorys --------------------------------------------------------------
+  const createSubcategory = async (subcategory, id) => {
+    try {
+      const data = {
+        name_subcategory: subcategory,
+        id_category: Number(id),
+      };
+      const res = await createSubCategoryRequest(data);
+      return res.data;
+    } catch (error) {
+      console.error(error);
+      setCategoryErrors(error.response.data);
+    }
+  };
+
   const getSubcategories = async (id) => {
     try {
       const res = await getSubcategoriesRequest(id);
@@ -52,33 +77,33 @@ export function CategoryProvider({ children }) {
       console.error(error);
     }
   };
-  const refreshListSubcategories = async (id, subcategoryList) => {
-    try {
-      const refreshSubcategoryList = {
-        id_category: id,
-        subcategories: subcategoryList,
-      };
-      await refreshSubcategorListRequest(refreshSubcategoryList);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
-  const subcategoriesQuestion = async (list_subcategories, id_question) => {
+  const deleteSubcategory = async (id) => {
     try {
-  
-      const data = { id_question: id_question, listSubcategories: list_subcategories}
-      await intoSubcategoriQuestionRequest(data)
+      await deleteSubcategoryRequest(id)
+
     } catch (error) {
       console.error(error)
     }
   }
 
+  const subcategoriesQuestion = async (list_subcategories, id_question) => {
+    try {
+      const data = {
+        id_question: id_question,
+        listSubcategories: list_subcategories,
+      };
+      await intoSubcategoriQuestionRequest(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  //-----------------------------------------------------------------------------
   return (
     <CategoryContext.Provider
       value={{
         createCategory,
-        refreshListSubcategories,
         categories,
         getCategories,
         getSubcategories,
@@ -87,7 +112,11 @@ export function CategoryProvider({ children }) {
         setListCategories,
         listSubCategories,
         setListSubCategories,
-        subcategoriesQuestion
+        subcategoriesQuestion,
+        categoryErrors,
+        resetErrors,
+        createSubcategory,
+        deleteSubcategory,
       }}
     >
       {children}

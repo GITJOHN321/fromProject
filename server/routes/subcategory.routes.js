@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getSubcategories, getSubcategory, createSubcategory, deleteSubcategory, updateSubcategory, questionSubcategory, refreshListSubcategories } from "../controllers/subcategory.controller.js";
+import { getSubcategories, getSubcategory, createSubcategory, deleteSubcategory, updateSubcategory, questionSubcategory } from "../controllers/subcategory.controller.js";
 import {authRequired} from "../middlewares/validateToken.js"
 import { validateSchema} from "../middlewares/validator.schema.js"
 import { createSubcategorySchema, getSubcategorySchema } from "../schemas/subcategory.schema.js";
@@ -13,5 +13,5 @@ router.put("/subcategories/:id", authRequired, updateSubcategory)
 router.delete("/subcategories/:id", authRequired, deleteSubcategory)
 router.post("/subcategories", authRequired,validateSchema(createSubcategorySchema), createSubcategory)
 router.post("/subcategories_question", authRequired, questionSubcategory)
-router.post("/subcategories-list", authRequired, refreshListSubcategories);
+
 export default router

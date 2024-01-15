@@ -39,6 +39,7 @@ export const createSubcategory = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
 export const updateSubcategory = async (req, res) => {
   try {
     const [result] = await pool.query(
@@ -86,24 +87,22 @@ export const questionSubcategory = async (req, res) => {
         );
       });
     } else {
-      
-        list2.map(async (e) => {
-          !list.includes(e)
-            ? await pool.query(
-                "DELETE FROM question_category WHERE id_subcategory = ? and id_question = ?",
-                [e, id_question]
-              )
-            : null;
-        });
-        list.map(async (e) => {
-          !list2.includes(e)
-            ? await pool.query(
-                "INSERT INTO question_category (id_subcategory, id_question) VALUES (?, ?)",
-                [e, id_question]
-              )
-            : null;
-        });
-      
+      list2.map(async (e) => {
+        !list.includes(e)
+          ? await pool.query(
+              "DELETE FROM question_category WHERE id_subcategory = ? and id_question = ?",
+              [e, id_question]
+            )
+          : null;
+      });
+      list.map(async (e) => {
+        !list2.includes(e)
+          ? await pool.query(
+              "INSERT INTO question_category (id_subcategory, id_question) VALUES (?, ?)",
+              [e, id_question]
+            )
+          : null;
+      });
     }
 
     return res.sendStatus(204);
@@ -112,40 +111,4 @@ export const questionSubcategory = async (req, res) => {
   }
 };
 
-export const refreshListSubcategories = async (req, res) => {
-  try {
-    let list = [];
-    const { subcategories, id_category } = req.body;
-    const [result] = await pool.query(
-      "SELECT * FROM subcategories WHERE id_category = ?",
-      [id_category]
-    );
 
-    subcategories.map((e) => {
-      e.id_subcategory ? list.push(e.id_subcategory) : null;
-    });
-
-    subcategories.map(async (e) => {
-      if (!e.id_subcategory) {
-        await pool.query(
-          "INSERT INTO subcategories(name_subcategory ,id_category) VALUES (?,?)",
-          [e.name_subcategory, id_category]
-        );
-      } else {
-        result.map(async (elemento) => {
-          !list.includes(elemento.id_subcategory)
-            ? await pool.query(
-                "DELETE FROM subcategories WHERE id_subcategory = ?",
-                [elemento.id_subcategory]
-              )
-            : await pool.query(
-                "UPDATE subcategories SET ? WHERE  id_subcategory = ? ",
-                [e, e.id_subcategory]
-              );
-        });
-      }
-    });
-  } catch (error) {
-    return res.status(500).json({ message: error.message });
-  }
-};

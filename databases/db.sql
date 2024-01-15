@@ -7,7 +7,7 @@ CREATE TABLE users(
 );
 CREATE TABLE categories (
     id_category INTEGER PRIMARY KEY AUTO_INCREMENT,
-    name_category VARCHAR(200) NOT NULL,
+    name_category VARCHAR(200) NOT NULL UNIQUE,
     id_users INTEGER NOT NULL,
     createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_users) REFERENCES users(id_users)
@@ -15,7 +15,7 @@ CREATE TABLE categories (
 CREATE TABLE subcategories (
     id_subcategory INTEGER PRIMARY KEY AUTO_INCREMENT,
     id_category INTEGER NOT NULL,
-    name_subcategory VARCHAR(255),
+    name_subcategory VARCHAR(255) NOT NULL UNIQUE,
    
     FOREIGN KEY (id_category) REFERENCES categories(id_category)
 );
@@ -25,6 +25,7 @@ CREATE TABLE questions (
     body TEXT NOT NULL,
     done BOOLEAN NOT NULL DEFAULT 0,
     id_user INTEGER NOT NULL,
+    list_answers JSON,
     createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_user) REFERENCES users(id_users)
 );

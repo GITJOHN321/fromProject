@@ -9,7 +9,8 @@ function HomePage() {
   const { Exams, getExams } = useExams();
 
   useEffect(() => {
-    getExams();
+    if(isAuthenticated) getExams();
+   
   }, []);
 
   return (

@@ -11,112 +11,106 @@ function CategoryForm() {
     formState: { errors },
   } = useForm();
 
-  const { createCategory, refreshListSubcategories } = useCategories();
+  const {
+    createCategory,
+    categoryErrors,
+    getSubcategories,
+    resetErrors,
+    createSubcategory,
+    deleteSubcategory,
+  } = useCategories();
 
-  //dinamic InputFields--------------------------------
-  const [inputFields, setInputFields] = useState([{ name_subcategory: "" }]);
+  const [activeForm, setActiveForm] = useState(false);
+  const [id, setId] = useState(0);
+  const [list, setList] = useState([]);
 
-  const handleFormChange = (index, event) => {
-    let data = [...inputFields];
-    data[index][event.target.name] = event.target.value;
-    setInputFields(data);
-  };
-  const addFields = (e) => {
-    e.preventDefault();
-    let newfield = { name_subcategory: "" };
-    setInputFields([...inputFields, newfield]);
-  };
   const removeFields = (index) => {
-    if (index > 0) {
-      let data = [...inputFields];
+
+      let data = [...list];
       data.splice(index, 1);
-      setInputFields(data);
-    }
+      setList(data);
+    
   };
-  //----------------------------------------------------
+
+  useEffect(() => {
+    resetErrors();
+  }, []);
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
-    console.log(inputFields);
-    //createCategory(data);
-
-
+    if (!activeForm) {
       const idCategory = await createCategory(data);
-      await refreshListSubcategories(idCategory.insertId,inputFields);
 
+      if (idCategory) {
+        setId(idCategory.insertId);
+        console.log(idCategory);
+        setActiveForm(true);
+      }
+    } else {
+      await createSubcategory(data.name_subcategory, id);
+      const subs = await getSubcategories(id);
+      setList(subs);
+    }
   });
   return (
     <div className="flex items-center justify-center">
       <div className="bg-slate-100 rounded-lg ">
-      <h1 className="head px-10 mb-5 font-bold text-2xl">New Question</h1>
+        <h1 className="head px-10 mb-5 font-bold text-2xl">
+          {!activeForm ? "New Category" : "New Subcategory" + id}
+        </h1>
+
+        {categoryErrors && (
+          <div className="bg-red-500 p-2 text-white text-center">
+            {categoryErrors.message}
+          </div>
+        )}
+
         <form className="px-10" onSubmit={onSubmit}>
-          <input
-            type="text"
-            {...register("name_category", { required: true })}
-            className="w-full input px-4 py-2 rounded-md my-2"
-            placeholder="Name Category"
-          />
-          <label className="text-xl font-bold" htmlFor="">Subcategories:</label>
-          {inputFields.map((inputField, index) => (
-            <div key={index} className="relative w-full">
+          {!activeForm ? (
+            <>
               <input
-                className="block w-full input px-4 py-2 rounded-md my-2"
                 type="text"
-                name="name_subcategory"
-                value={inputField.name_subcategory}
-                onChange={(event) => handleFormChange(index, event)}
-                placeholder="subcategory"
-                required
+                {...register("name_category", { required: true })}
+                className="w-full input px-4 py-2 rounded-md my-2"
+                placeholder="Name Category"
               />
+
               <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  removeFields(index);
-                }}
-                className="absolute top-0 end-11 px-2.5 h-full text-sm font-medium border-2 border-sky-800 bg-sky-100 hover:bg-sky-200 hover:border-sky-900 text-sky-900"
+                className="bg-sky-600  hover:bg-sky-500 text-white px-4 mt-3 py-2 rounded-md"
+                type="submit"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M18 12H6"
-                  />
-                </svg>
+                Save
               </button>
-              <button
-                onClick={addFields}
-                className="absolute top-0 end-0 px-2.5 h-full font-medium   rounded-e-lg  border-2 border-sky-800 bg-sky-600  hover:bg-sky-500 text-white"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
+            </>
+          ) : (
+            <div>
+              <div className="relative w-full">
+                <input
+                  type="text"
+                  {...register("name_subcategory", { required: true })}
+                  className=" block w-full input px-4 py-2 rounded-md my-2"
+                  placeholder="Name Category"
+                />
+
+                <button className="absolute top-0 end-0 px-2.5 h-full font-medium   rounded-e-lg  border-2 border-sky-800 bg-sky-600  hover:bg-sky-500 text-white">
+                  Add
+                </button>
+              </div>
+              {list.map((e, index) => (
+                <div
+                className="tag "
+                  key={e.id_subcategory}
+                  onClick={async (o) => {
+                    o.preventDefault();
+                    removeFields(index)
+                    await deleteSubcategory(e.id_subcategory)
+                    console.log(e)
+                  }}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
-                  />
-                </svg>
-              </button>
+                  {e.name_subcategory}
+                </div>
+              ))}
             </div>
-          ))}
-          <button
-            className="bg-sky-600  hover:bg-sky-500 text-white px-4 mt-3 py-2 rounded-md"
-            type="submit"
-          >
-            Save
-          </button>
+          )}
         </form>
       </div>
     </div>
