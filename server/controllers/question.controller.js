@@ -62,6 +62,22 @@ export const createQuestion = async (req, res) => {
   }
 };
 
+export const createQuestionWithAnswer = async (req, res) => {
+  try {
+    const id = req.user.id;
+    const { title, body, list_answers } = req.body;
+    const answers = JSON.stringify(list_answers)
+    console.log(answers)
+    const [result] = await pool.query(
+      "INSERT INTO questions(title, body, list_answers ,id_user) VALUES (?,?,?,?)",
+      [title, body, answers , id]
+    );
+    res.json(result);
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
 export const updateQuestion = async (req, res) => {
   try {
     const [result] = await pool.query(

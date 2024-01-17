@@ -8,7 +8,7 @@ import Dropdown from "./DropDown";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
-function QuestionCreateForm({ questions}) {
+function QuestionCreateForm({ questions }) {
   const { register, handleSubmit, setValue } = useForm();
   const {
     createQuestion,
@@ -74,9 +74,12 @@ function QuestionCreateForm({ questions}) {
         });
         setListSubCategories(question.subcategories);
         setInputFields(list);
+      }else{
+        setListSubCategories([])
       }
+      await getCategories();
     }
-    getCategories();
+
     loadQuestion();
   }, []);
 
@@ -123,9 +126,13 @@ function QuestionCreateForm({ questions}) {
   });
   return (
     <div className="bg-slate-100 rounded-lg  ">
-      {!questions && <h1 className="head px-10 font-bold text-2xl">New Question</h1>}
+      {!questions && (
+        <h1 className="head px-10 font-bold text-2xl">New Question</h1>
+      )}
       <form className="px-10" onSubmit={onSubmit}>
-        <label className="text-lg" htmlFor="title">Title:</label>
+        <label className="text-lg" htmlFor="title">
+          Title:
+        </label>
         <input
           placeholder="title"
           type="text"
@@ -240,7 +247,7 @@ function QuestionCreateForm({ questions}) {
           </div>
         </div>
         <button className="bg-sky-600  hover:bg-sky-500 text-white px-4 py-2 rounded-md">
-          {questions? "Update Question" : "Save"}
+          {questions ? "Update Question" : "Save"}
         </button>
       </form>
     </div>

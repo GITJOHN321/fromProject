@@ -44,6 +44,7 @@ function CategoryForm() {
         setId(idCategory.insertId);
         console.log(idCategory);
         setActiveForm(true);
+        resetErrors();
       }
     } else {
       await createSubcategory(data.name_subcategory, id);
@@ -88,7 +89,7 @@ function CategoryForm() {
                   type="text"
                   {...register("name_subcategory", { required: true })}
                   className=" block w-full input px-4 py-2 rounded-md my-2"
-                  placeholder="Name Category"
+                  placeholder="Name Subcategory"
                 />
 
                 <button className="absolute top-0 end-0 px-2.5 h-full font-medium   rounded-e-lg  border-2 border-sky-800 bg-sky-600  hover:bg-sky-500 text-white">

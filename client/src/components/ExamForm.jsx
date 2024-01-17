@@ -37,7 +37,7 @@ function ExamForm() {
     if (count > 0) {
       setScores(score / count);
     }
-    console.log(score + ": " + count);
+    //console.log(score + ": " + count);
   };
 
   const handleScoreChange = (evt) => {
@@ -56,10 +56,16 @@ function ExamForm() {
   const onDrop = async (evt) => {
     evt.preventDefault();
     const itemID = evt.dataTransfer.getData("itemID");
+    //const item = JSON.parse(itemID);
     const item = await getQuestion(parseInt(itemID));
+
     setListQuestions([...listQuestions, item]);
     setActive(false);
     maxScores(maxScore, listQuestions.length + 1);
+
+   const pass = listQuestions.map( e => e.id_question)
+
+    console.log(pass)
   };
   //------------------------------------------------------------------------------------
   const onSubmit = handleSubmit(async (data) => {
@@ -118,8 +124,6 @@ function ExamForm() {
                 placeholder="00"
               />
             </div>
-
-            
           </div>
 
           <button
@@ -134,7 +138,13 @@ function ExamForm() {
           onDragOver={(evt) => dragingOver(evt)}
           onDrop={(evt) => onDrop(evt, Questions)}
         >
-          {listQuestions.length < 1 && <div className="px-10 py-5 "><div className="bg-blue-200 py-5 rounded-lg border-4 border-dashed border-sky-800 text-center text-sky-500 transition hover:scale-105 duration-300">DRAG AND DROP</div></div>}
+          {listQuestions.length < 1 && (
+            <div className="px-10 py-5 ">
+              <div className="bg-blue-200 py-5 rounded-lg border-4 border-dashed border-sky-800 text-center text-sky-500 transition hover:scale-105 duration-300">
+                DRAG AND DROP
+              </div>
+            </div>
+          )}
           {listQuestions.map((question, index) => (
             <div key={index}>
               <div className="flex flex-row items-center">
@@ -180,9 +190,10 @@ function ExamForm() {
                 </button>
               </div>
 
-              <QuestionExamCard question={question} index={index+1}>
-
-              </QuestionExamCard>
+              <QuestionExamCard
+                question={question}
+                index={index + 1}
+              ></QuestionExamCard>
             </div>
           ))}
         </div>

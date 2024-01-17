@@ -65,8 +65,6 @@ export function QuestionProvider({ children }) {
   const getQuestion = async (id) => {
     try {
       const res = await getQuestionRequest(id);
-
-      console.log(res.data);
       return res.data;
     } catch (error) {
       console.error(error);

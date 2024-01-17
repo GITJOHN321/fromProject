@@ -3,19 +3,22 @@ import { Link } from "react-router-dom";
 import SubcategoryTag from "./SubcategoryTag";
 import { MdDeleteForever } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
+import { useState, useEffect } from "react";
 function QuestionCard({ question }) {
   const { deleteQuestion, updateForm, setQuestion } = useQuestions();
 
   const startDrag = (evt, item) => {
     evt.dataTransfer.setData("itemID", item.id_question);
-    console.log(item);
+   // console.log(item);
+   //evt.dataTransfer.setData("itemID", JSON.stringify(item));
   };
 
   const sendEdit = (question) => {
     updateForm();
     setQuestion(question);
   };
-
+ 
+  
   return (
     <div
       draggable

@@ -5,6 +5,7 @@ import {
   deleteQuestion,
   updateQuestion,
   createQuestion,
+  createQuestionWithAnswer
 } from "../controllers/question.controller.js";
 import {authRequired} from "../middlewares/validateToken.js"
 import { validateSchema} from "../middlewares/validator.schema.js"
@@ -17,7 +18,7 @@ router.get("/questions/:id", authRequired, getQuestion)
 router.put("/questions/:id", authRequired, updateQuestion)
 router.delete("/questions/:id", authRequired, deleteQuestion)
 router.post("/questions", authRequired,validateSchema(createQuestionSchema), createQuestion)
-
+router.post("/questionss", authRequired, createQuestionWithAnswer)
 export default router
 
 
