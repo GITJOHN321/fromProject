@@ -92,6 +92,7 @@ function QuestionCreateForm({ questions }) {
         const question_data = {
           title: data.title,
           body: description,
+          list_answers: inputFields
         };
         updateQuestion(id, question_data);
 

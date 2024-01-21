@@ -6,7 +6,6 @@ export const getQuestions = async (req, res) => {
       "SELECT * FROM questions WHERE id_user = ? ORDER BY id_question DESC",
       [req.user.id]
     );
-    const list = [];
 
     for (let i = 0; i < result.length; i++) {
       const [sub] = await pool.query(
@@ -39,7 +38,7 @@ export const getQuestion = async (req, res) => {
     if (result.length === 0) {
       return res.status(404).json({ message: "task not found" });
     }
-
+    result[0].list_answers = JSON.parse(result[0].list_answers)
     result[0].answers = [result_answer][0];
     result[0].subcategories = [result_subcategories][0];
     res.json(result[0]);
@@ -80,6 +79,9 @@ export const createQuestionWithAnswer = async (req, res) => {
 
 export const updateQuestion = async (req, res) => {
   try {
+    
+    req.body.list_answers = JSON.stringify(req.body.list_answers)
+    console.log(req.body)
     const [result] = await pool.query(
       "UPDATE questions SET ? WHERE id_question = ?",
       [req.body, req.params.id]
