@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AiOutlineCaretUp, AiOutlineCaretDown } from "react-icons/ai";
 import { useCategories } from "../context/CategoryContext";
+import { notRepeatArrays } from "../utils/utilsScripts.js";
 
 function Dropdown({ list, name }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,6 +12,7 @@ function Dropdown({ list, name }) {
   const onsubmit = (evt) => {
     evt.preventDefault();
     setIsOpen((prev) => !prev);
+    console.log(listSubCategories)
   };
   const onClickOption = (evt, e) => {
     evt.preventDefault();
@@ -18,12 +20,12 @@ function Dropdown({ list, name }) {
     if (e.name_category) {
       getSubcategories(e.id_category);
       setName(e.name_category);
-    }
-    if (e.name_subcategory) {
+
+    }else if (e.name_subcategory) {
       setName(e.name_subcategory);
 
-      if (listSubCategories.includes(e)) {
-        console.log("repetido");
+      if (notRepeatArrays(listSubCategories, e)) {
+        alert('¡Subcategory Repeat!')
       } else {
         setListSubCategories([...listSubCategories, e]);
       }

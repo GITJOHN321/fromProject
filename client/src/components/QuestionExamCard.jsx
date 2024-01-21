@@ -9,13 +9,13 @@ function QuestionExamCard({ question, index }) {
   return (
     <div>
       <h1 className="text-xl font-bold">
-        {index}. {question.title}
+        {question.title}
       </h1>
       <p className="py-2 font-medium" dangerouslySetInnerHTML={{ __html: question.body }}></p>
       <h1 className="py-2 text-xl font-bold">Respuestas: </h1>
       <ul className="pt-2 pb-4">
-        {question.answers.map((e, i) => (
-          <li key={e.id_answer}><strong>{i+1}.</strong> {e.body_answer}</li>
+        {question.list_answers.map((e, i) => (
+          <li key={i}><strong>{i+1}.</strong> {e.body_answer}</li>
         ))}
       </ul>
 

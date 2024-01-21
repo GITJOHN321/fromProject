@@ -1,25 +1,21 @@
 import { useForm } from "react-hook-form";
 import { useQuestions } from "../context/QuestionContext";
-import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useCategories } from "../context/CategoryContext";
 import SubcategoryTag from "./SubcategoryTag";
-import Dropdown from "./DropDown";
+import Dropdown from "./Dropdown";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 function QuestionCreateForm({ questions }) {
   const { register, handleSubmit, setValue } = useForm();
   const {
-    createQuestion,
-    getQuestion,
     updateQuestion,
     getQuestions,
     setActive,
-    refreshListAnswer,
+    createQuestionWithAnswer,
   } = useQuestions();
-  const navigate = useNavigate();
-  const params = useParams();
+
   const {
     getCategories,
     categories,
@@ -63,19 +59,12 @@ function QuestionCreateForm({ questions }) {
   useEffect(() => {
     async function loadQuestion() {
       if (questions != null) {
-        let list = [];
-        const id = questions.id_question;
-        const question = await getQuestion(id);
-
-        setValue("title", question.title);
-        setDescription(question.body);
-        question.answers.map((answer) => {
-          list.push(answer);
-        });
-        setListSubCategories(question.subcategories);
-        setInputFields(list);
-      }else{
-        setListSubCategories([])
+        setValue("title", questions.title);
+        setDescription(questions.body);
+        setListSubCategories(questions.subcategories);
+        setInputFields(questions.list_answers);
+      } else {
+        setListSubCategories([]);
       }
       await getCategories();
     }
@@ -84,39 +73,26 @@ function QuestionCreateForm({ questions }) {
   }, []);
 
   const onSubmit = handleSubmit(async (data) => {
-    if (questions) {
-      const id = questions.id_question;
-      //function update question
-      async function updateQuestionAndAnswers() {
-        const question_data = {
-          title: data.title,
-          body: description,
-        };
-        updateQuestion(id, question_data);
-
-        //controller List inputs answers --------------------------------------------
-
-        refreshListAnswer(inputFields, id);
-        subcategoriesQuestion(listSubCategories, id);
-        //----------------------------------------------------------------------
-      }
-      updateQuestionAndAnswers();
-      setActive(false);
-      getQuestions();
+    const question_data = {
+      title: data.title,
+      body: description,
+      list_answers: inputFields,
+    };
+    //validate description is empty with regex-----------
+    const regex = /^\s*$/;
+    if (regex.test(description) || listSubCategories.length <= 0) {
+      console.log(false);
+      return;
     } else {
-      //validate description is empty with regex-----------
-      const regex = /^\s*$/;
-      if (regex.test(description) || listSubCategories.length <= 0) {
-        console.log(false);
-        return;
+      if (questions) {
+        const id = questions.id_question;
+        await updateQuestion(id, question_data);
+        //controller List inputs subcategories --------------------------------------------
+        await subcategoriesQuestion(listSubCategories, id);
+        setActive(false);
+        getQuestions();
       } else {
-        const question_data = {
-          title: data.title,
-          body: description,
-        };
-        const idQuestion = await createQuestion(question_data);
-        refreshListAnswer(inputFields, idQuestion.insertId);
-
+        const idQuestion = await createQuestionWithAnswer(question_data);
         subcategoriesQuestion(listSubCategories, idQuestion.insertId);
       }
     }
@@ -219,31 +195,18 @@ function QuestionCreateForm({ questions }) {
         <div className="py-2">
           <h1 className="text-xl font-bold pb-2">Subcategories:</h1>
           <div className="grid grid-cols-4">
-            {questions
-              ? questions.subcategories.map((e, index) => (
-                  <span
-                    onClick={(e) => {
-                      e.preventDefault();
-                      removeSubcategories(index);
-                    }}
-                    key={e.id_subcategory}
-                    className="flex text-center"
-                  >
-                    <SubcategoryTag name={e.name_subcategory}></SubcategoryTag>
-                  </span>
-                ))
-              : listSubCategories.map((e, index) => (
-                  <span
-                    onClick={(e) => {
-                      e.preventDefault();
-                      removeSubcategories(index);
-                    }}
-                    key={e.id_subcategory}
-                    className="flex text-center"
-                  >
-                    <SubcategoryTag name={e.name_subcategory}></SubcategoryTag>
-                  </span>
-                ))}
+            {listSubCategories.map((e, index) => (
+              <span
+                onClick={(e) => {
+                  e.preventDefault();
+                  removeSubcategories(index);
+                }}
+                key={e.id_subcategory}
+                className="flex text-center"
+              >
+                <SubcategoryTag name={e.name_subcategory}></SubcategoryTag>
+              </span>
+            ))}
           </div>
         </div>
         <button className="bg-sky-600  hover:bg-sky-500 text-white px-4 py-2 rounded-md">

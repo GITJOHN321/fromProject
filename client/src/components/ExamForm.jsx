@@ -3,8 +3,8 @@ import { useExams } from "../context/ExamContext";
 import { useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useQuestions } from "../context/QuestionContext";
-import QuestionCreateForm from "../components/QuestionCreateForm";
 import QuestionExamCard from "./QuestionExamCard";
+import { notRepeatArrays } from "../utils/utilsScripts.js";
 
 function ExamForm() {
   const {
@@ -13,7 +13,7 @@ function ExamForm() {
     formState: { errors },
   } = useForm();
   const { createExam, insertQuestionExam } = useExams();
-  const { Questions, getQuestion, getQuestions, setActive } = useQuestions();
+  const { Questions, getQuestions, setActive } = useQuestions();
 
   const navigate = useNavigate();
   const [listQuestions, setListQuestions] = useState([]);
@@ -56,16 +56,16 @@ function ExamForm() {
   const onDrop = async (evt) => {
     evt.preventDefault();
     const itemID = evt.dataTransfer.getData("itemID");
-    //const item = JSON.parse(itemID);
-    const item = await getQuestion(parseInt(itemID));
+    const item = JSON.parse(itemID);
+    //const item = await getQuestion(parseInt(itemID));
 
-    setListQuestions([...listQuestions, item]);
+    if (notRepeatArrays(listQuestions, item)) {
+      alert("!This Question is Repeat!");
+    } else {
+      setListQuestions([...listQuestions, item]);
+      maxScores(maxScore, listQuestions.length + 1);
+    }
     setActive(false);
-    maxScores(maxScore, listQuestions.length + 1);
-
-   const pass = listQuestions.map( e => e.id_question)
-
-    console.log(pass)
   };
   //------------------------------------------------------------------------------------
   const onSubmit = handleSubmit(async (data) => {
