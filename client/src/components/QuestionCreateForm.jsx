@@ -17,6 +17,7 @@ function QuestionCreateForm({ questions }) {
     getQuestions,
     setActive,
     refreshListAnswer,
+    createQuestionWithAnswer
   } = useQuestions();
   const navigate = useNavigate();
   const params = useParams();
@@ -113,8 +114,9 @@ function QuestionCreateForm({ questions }) {
         const question_data = {
           title: data.title,
           body: description,
+          list_answers: inputFields
         };
-        const idQuestion = await createQuestion(question_data);
+        const idQuestion = await createQuestionWithAnswer(question_data);
         refreshListAnswer(inputFields, idQuestion.insertId);
 
         subcategoriesQuestion(listSubCategories, idQuestion.insertId);

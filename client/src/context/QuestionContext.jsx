@@ -5,6 +5,7 @@ import {
   deleteQuestionsRequest,
   getQuestionRequest,
   putQuestionsRequest,
+  createQuestionRequest,
 } from "../api/question.js";
 import {
   createAnswersRequest,
@@ -41,6 +42,14 @@ export function QuestionProvider({ children }) {
       console.error(error);
     }
   };
+  const createQuestionWithAnswer = async (question) => {
+    try {
+      const res = await createQuestionRequest(question)
+      return res.data
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   const getQuestions = async () => {
     try {
@@ -133,6 +142,7 @@ export function QuestionProvider({ children }) {
         Active,
         updateForm,
         refreshListAnswer,
+        createQuestionWithAnswer,
       }}
     >
       {children}
