@@ -8,9 +8,8 @@ function QuestionCard({ question }) {
   const { deleteQuestion, updateForm, setQuestion } = useQuestions();
 
   const startDrag = (evt, item) => {
-    evt.dataTransfer.setData("itemID", item.id_question);
-   // console.log(item);
-   //evt.dataTransfer.setData("itemID", JSON.stringify(item));
+   // evt.dataTransfer.setData("itemID", item.id_question);
+   evt.dataTransfer.setData("itemID", JSON.stringify(item));
   };
 
   const sendEdit = (question) => {

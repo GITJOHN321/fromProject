@@ -13,6 +13,7 @@ export const getQuestions = async (req, res) => {
         [result[i].id_question]
       );
       result[i].subcategories = [sub][0];
+      result[i].list_answers = JSON.parse(result[i].list_answers)
     }
 
     res.json(result);

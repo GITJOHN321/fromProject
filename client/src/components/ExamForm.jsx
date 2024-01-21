@@ -55,16 +55,15 @@ function ExamForm() {
   const onDrop = async (evt) => {
     evt.preventDefault();
     const itemID = evt.dataTransfer.getData("itemID");
-    //const item = JSON.parse(itemID);
-    const item = await getQuestion(parseInt(itemID));
+    const item = JSON.parse(itemID);
+    //const item = await getQuestion(parseInt(itemID));
 
     setListQuestions([...listQuestions, item]);
     setActive(false);
     maxScores(maxScore, listQuestions.length + 1);
 
-   const pass = listQuestions.map( e => e.id_question)
-
-    console.log(pass)
+  
+  
   };
   //------------------------------------------------------------------------------------
   const onSubmit = handleSubmit(async (data) => {
@@ -145,7 +144,7 @@ function ExamForm() {
             </div>
           )}
           {listQuestions.map((question, index) => (
-            <div key={index}>
+            <div key={question.id_question}>
               <div className="flex flex-row items-center">
                 <h1 className="block text-2xl w-full font-bold  my-4 basis-1/8">
                   Pregunta {index + 1}
