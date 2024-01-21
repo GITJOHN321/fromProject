@@ -3,7 +3,6 @@ import { useExams } from "../context/ExamContext";
 import { useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useQuestions } from "../context/QuestionContext";
-import QuestionCreateForm from "../components/QuestionCreateForm";
 import QuestionExamCard from "./QuestionExamCard";
 
 function ExamForm() {

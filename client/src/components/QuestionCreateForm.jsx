@@ -11,12 +11,10 @@ import "react-quill/dist/quill.snow.css";
 function QuestionCreateForm({ questions }) {
   const { register, handleSubmit, setValue } = useForm();
   const {
-    createQuestion,
     getQuestion,
     updateQuestion,
     getQuestions,
     setActive,
-    refreshListAnswer,
     createQuestionWithAnswer
   } = useQuestions();
   const navigate = useNavigate();
@@ -64,17 +62,13 @@ function QuestionCreateForm({ questions }) {
   useEffect(() => {
     async function loadQuestion() {
       if (questions != null) {
-        let list = [];
         const id = questions.id_question;
         const question = await getQuestion(id);
 
         setValue("title", question.title);
         setDescription(question.body);
-        question.answers.map((answer) => {
-          list.push(answer);
-        });
         setListSubCategories(question.subcategories);
-        setInputFields(list);
+        setInputFields(question.list_answers);
       }else{
         setListSubCategories([])
       }
@@ -94,12 +88,9 @@ function QuestionCreateForm({ questions }) {
           body: description,
           list_answers: inputFields
         };
-        updateQuestion(id, question_data);
-
+        await updateQuestion(id, question_data);
         //controller List inputs answers --------------------------------------------
-
-        refreshListAnswer(inputFields, id);
-        subcategoriesQuestion(listSubCategories, id);
+        await subcategoriesQuestion(listSubCategories, id);
         //----------------------------------------------------------------------
       }
       updateQuestionAndAnswers();
@@ -118,8 +109,6 @@ function QuestionCreateForm({ questions }) {
           list_answers: inputFields
         };
         const idQuestion = await createQuestionWithAnswer(question_data);
-        refreshListAnswer(inputFields, idQuestion.insertId);
-
         subcategoriesQuestion(listSubCategories, idQuestion.insertId);
       }
     }

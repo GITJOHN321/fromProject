@@ -17,8 +17,8 @@ router.get("/questions", authRequired, getQuestions)
 router.get("/questions/:id", authRequired, getQuestion)
 router.put("/questions/:id", authRequired, updateQuestion)
 router.delete("/questions/:id", authRequired, deleteQuestion)
-router.post("/questions", authRequired,validateSchema(createQuestionSchema), createQuestion)
-router.post("/questionss", authRequired, validateSchema(createQuestionAnswersSchema) ,createQuestionWithAnswer)
+//router.post("/questions", authRequired,validateSchema(createQuestionSchema), createQuestion)
+router.post("/questions", authRequired, validateSchema(createQuestionAnswersSchema) ,createQuestionWithAnswer)
 export default router
 
 

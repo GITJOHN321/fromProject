@@ -1,6 +1,5 @@
 import { createContext, useContext, useState } from "react";
 import {
-  createQuestionsRequest,
   getQuestionsRequest,
   deleteQuestionsRequest,
   getQuestionRequest,
@@ -13,7 +12,6 @@ import {
   deleteAnswersRequest,
   refreshListAnswerRequest,
 } from "../api/answer.js";
-
 
 const QuestionContext = createContext();
 
@@ -33,23 +31,23 @@ export function QuestionProvider({ children }) {
   const updateForm = () => {
     setActive(!Active);
   };
-
-  const createQuestion = async (question) => {
+  /* const createQuestion = async (question) => {
     try {
       const res = await createQuestionsRequest(question);
       return res.data;
     } catch (error) {
       console.error(error);
     }
-  };
+  };*/
+
   const createQuestionWithAnswer = async (question) => {
     try {
-      const res = await createQuestionRequest(question)
-      return res.data
+      const res = await createQuestionRequest(question);
+      return res.data;
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   const getQuestions = async () => {
     try {
@@ -122,8 +120,6 @@ export function QuestionProvider({ children }) {
     }
   };
 
-
-
   return (
     <QuestionContext.Provider
       value={{
@@ -131,7 +127,6 @@ export function QuestionProvider({ children }) {
         Question,
         setQuestion,
         setActive,
-        createQuestion,
         getQuestions,
         deleteQuestion,
         getQuestion,
