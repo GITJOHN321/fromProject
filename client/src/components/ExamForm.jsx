@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useQuestions } from "../context/QuestionContext";
 import QuestionExamCard from "./QuestionExamCard";
+import { notRepeatArrays } from "../utils/utilsScripts.js";
 
 function ExamForm() {
   const {
@@ -12,7 +13,7 @@ function ExamForm() {
     formState: { errors },
   } = useForm();
   const { createExam, insertQuestionExam } = useExams();
-  const { Questions, getQuestion, getQuestions, setActive } = useQuestions();
+  const { Questions, getQuestions, setActive } = useQuestions();
 
   const navigate = useNavigate();
   const [listQuestions, setListQuestions] = useState([]);
@@ -58,12 +59,13 @@ function ExamForm() {
     const item = JSON.parse(itemID);
     //const item = await getQuestion(parseInt(itemID));
 
-    setListQuestions([...listQuestions, item]);
+    if (notRepeatArrays(listQuestions, item)) {
+      alert("!This Question is Repeat!");
+    } else {
+      setListQuestions([...listQuestions, item]);
+      maxScores(maxScore, listQuestions.length + 1);
+    }
     setActive(false);
-    maxScores(maxScore, listQuestions.length + 1);
-
-  
-  
   };
   //------------------------------------------------------------------------------------
   const onSubmit = handleSubmit(async (data) => {
@@ -144,7 +146,7 @@ function ExamForm() {
             </div>
           )}
           {listQuestions.map((question, index) => (
-            <div key={question.id_question}>
+            <div key={index}>
               <div className="flex flex-row items-center">
                 <h1 className="block text-2xl w-full font-bold  my-4 basis-1/8">
                   Pregunta {index + 1}
