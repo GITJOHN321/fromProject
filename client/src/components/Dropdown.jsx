@@ -12,7 +12,6 @@ function Dropdown({ list, name }) {
   const onsubmit = (evt) => {
     evt.preventDefault();
     setIsOpen((prev) => !prev);
-    console.log(listSubCategories)
   };
   const onClickOption = (evt, e) => {
     evt.preventDefault();

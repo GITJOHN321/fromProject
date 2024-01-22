@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useQuestions } from "../context/QuestionContext";
+import { FaCheck } from "react-icons/fa";
 function QuestionExamCard({ question, index }) {
   const {updateForm, setQuestion } = useQuestions();
   const sendEdit = (question) => {
@@ -7,7 +8,7 @@ function QuestionExamCard({ question, index }) {
     setQuestion(question);
   };
   return (
-    <div>
+    <div className="">
       <h1 className="text-xl font-bold">
         {question.title}
       </h1>
@@ -15,7 +16,7 @@ function QuestionExamCard({ question, index }) {
       <h1 className="py-2 text-xl font-bold">Respuestas: </h1>
       <ul className="pt-2 pb-4">
         {question.list_answers.map((e, i) => (
-          <li key={i}><strong>{i+1}.</strong> {e.body_answer}</li>
+          <li key={i} className="flex items-center"><strong>{i+1}. </strong> {e.body_answer}&nbsp;{e.done ? <FaCheck fill="#007cc4"/> : null}</li>
         ))}
       </ul>
 

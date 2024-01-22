@@ -146,13 +146,13 @@ function ExamForm() {
             </div>
           )}
           {listQuestions.map((question, index) => (
-            <div key={index}>
+            <div key={question.id_question} className="px-10">
               <div className="flex flex-row items-center">
                 <h1 className="block text-2xl w-full font-bold  my-4 basis-1/8">
                   Pregunta {index + 1}
                 </h1>
                 <input
-                  className=" border-2 bg-zinc-800 border-fuchsia-600 hover:border-fuchsia-700 text-white px-4 text-center rounded-md my-2 basis-1/25 w-16 h-9"
+                  className=" border-4 border-sky-600 hover:border-sky-700 px-4 text-center rounded-md my-2 basis-1/25 w-16 h-9"
                   type="text"
                   min="0"
                   name="question_score"
