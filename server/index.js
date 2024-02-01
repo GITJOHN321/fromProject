@@ -4,7 +4,6 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
 import questionRoutes from "./routes/question.routes.js";
-import answerRoutes from "./routes/answer.routes.js";
 import categoryRoutes from "./routes/category.routes.js";
 import subcategoryRoutes from "./routes/subcategory.routes.js";
 import examRoutes from "./routes/exam.routes.js";
@@ -16,7 +15,6 @@ app.use(cookieParser());
 
 app.use("/api/", authRoutes);
 app.use("/api", questionRoutes);
-app.use("/api", answerRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", subcategoryRoutes);
 app.use("/api", examRoutes);

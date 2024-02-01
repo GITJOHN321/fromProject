@@ -47,11 +47,12 @@ export function QuestionProvider({ children }) {
   const getQuestions = async () => {
     try {
       const res = await getQuestionsRequest();
-      console.log(res.data);
+      
       setQuestions(res.data);
+      return res.data
     } catch (error) {
       console.error(error);
-    }
+    } 
   };
   const deleteQuestion = async (id) => {
     try {

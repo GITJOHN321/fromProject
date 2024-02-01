@@ -25,7 +25,7 @@ CREATE TABLE questions (
     body TEXT NOT NULL,
     done BOOLEAN NOT NULL DEFAULT 0,
     id_user INTEGER NOT NULL,
-    list_answers JSON,
+    list_answers JSON NOT NULL,
     createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_user) REFERENCES users(id_users)
 );

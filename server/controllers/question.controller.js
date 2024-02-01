@@ -14,6 +14,7 @@ export const getQuestions = async (req, res) => {
       );
       result[i].subcategories = [sub][0];
       result[i].list_answers = JSON.parse(result[i].list_answers)
+ 
     }
 
     res.json(result);
@@ -95,10 +96,7 @@ export const deleteQuestion = async (req, res) => {
       "DELETE FROM question_category WHERE id_question = ?",
       [req.params.id]
     );
-    const delete_answer = await pool.query(
-      "DELETE FROM answers WHERE question_id = ?",
-      [req.params.id]
-    );
+
     const [result] = await pool.query(
       "DELETE FROM questions WHERE id_question = ?",
       [req.params.id]

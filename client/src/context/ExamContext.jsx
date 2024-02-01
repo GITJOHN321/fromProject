@@ -13,6 +13,7 @@ export const useExams = () => {
 
 export function ExamProvider({ children }) {
   const [Exams, setExams] = useState([]);
+  const [listQuestions, setListQuestions] = useState([]);
 
   const getExams = async() =>{
     try {
@@ -47,7 +48,7 @@ export function ExamProvider({ children }) {
   }
 
   return (
-    <ExamContext.Provider value={{ createExam, insertQuestionExam, getExams, Exams }}>
+    <ExamContext.Provider value={{ createExam, insertQuestionExam, getExams, Exams , listQuestions, setListQuestions}}>
       {children}
     </ExamContext.Provider>
   );

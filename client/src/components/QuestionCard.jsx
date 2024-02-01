@@ -4,6 +4,7 @@ import SubcategoryTag from "./SubcategoryTag";
 import { MdDeleteForever } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { useState, useEffect } from "react";
+
 function QuestionCard({ question }) {
   const { deleteQuestion, updateForm, setQuestion } = useQuestions();
 
@@ -63,7 +64,7 @@ function QuestionCard({ question }) {
       <div className="md:grid lg:grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 py-2">
         {question.subcategories.map((sub) => (
           <SubcategoryTag
-            key={sub.id_subcategory}
+            key={sub.id_subcategory} 
             name={sub.name_subcategory}
           ></SubcategoryTag>
         ))}

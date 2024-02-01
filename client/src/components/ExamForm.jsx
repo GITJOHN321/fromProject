@@ -12,11 +12,12 @@ function ExamForm() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { createExam, insertQuestionExam } = useExams();
-  const { Questions, getQuestions, setActive} = useQuestions();
+  const { createExam, insertQuestionExam, listQuestions, setListQuestions } =
+    useExams();
+  const { getQuestions, setActive } = useQuestions();
 
   const navigate = useNavigate();
-  const [listQuestions, setListQuestions] = useState([]);
+
   const [scores, setScores] = useState([0]);
   const [maxScore, setMaxScore] = useState([0]);
 
@@ -52,20 +53,20 @@ function ExamForm() {
   const dragingOver = (evt) => {
     evt.preventDefault();
   };
- 
+
   const onDrop = async (evt) => {
     evt.preventDefault();
     const itemID = evt.dataTransfer.getData("itemID");
     const item = JSON.parse(itemID);
     //const item = await getQuestion(JSON.parse(itemID).id_question);
-   // console.log(Questions)
+    // console.log(Questions)
 
     if (notRepeatArrays(listQuestions, item)) {
       alert("!This Question is Repeat!");
     } else {
       setListQuestions([...listQuestions, item]);
       maxScores(maxScore, listQuestions.length + 1);
-      console.log(item)
+      console.log(item);
     }
     setActive(false);
   };
@@ -83,7 +84,7 @@ function ExamForm() {
       };
       await insertQuestionExam(data);
     });
-    getQuestions();
+    await getQuestions();
   });
 
   return (
@@ -179,7 +180,7 @@ function ExamForm() {
                   >
                     {" "}
                     <rect
-                      x="3" 
+                      x="3"
                       y="3"
                       width="18"
                       height="18"
@@ -202,7 +203,6 @@ function ExamForm() {
       </div>
     </div>
   );
-  
 }
 
 export default ExamForm;

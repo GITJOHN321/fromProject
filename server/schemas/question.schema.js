@@ -8,7 +8,7 @@ export const createQuestionSchema = z.object({
 
 export const answerSchema = z.object({
     body_answer: z.string({required_error: "Body is required"}),
-    done: z.number({required_error: "done is required"})
+    done: z.boolean({required_error: "done is required"})
 })
 
 export const createQuestionAnswersSchema = z.object({
