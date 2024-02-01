@@ -8,7 +8,7 @@ function QuestionExamCard({ question, index }) {
     setQuestion(question);
   };
   return (
-    <div className="">
+    <div className=""> 
       <h1 className="text-xl font-bold">
         {question.title}
       </h1>

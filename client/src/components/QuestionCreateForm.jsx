@@ -51,7 +51,7 @@ function QuestionCreateForm({ questions }) {
     }
   };
   //Checkbox control------------------------------------
-  const [isOpen, setIsOpen] = useState(false);
+
 
   const onCheck = (index, event) => {
     let data = [...inputFields];
@@ -95,7 +95,7 @@ function QuestionCreateForm({ questions }) {
         //controller List inputs subcategories --------------------------------------------
         await subcategoriesQuestion(listSubCategories, id);
         setActive(false);
-        getQuestions();
+      
       } else {
         const idQuestion = await createQuestionWithAnswer(question_data);
         subcategoriesQuestion(listSubCategories, idQuestion.insertId);

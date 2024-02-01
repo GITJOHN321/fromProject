@@ -13,7 +13,7 @@ function ExamForm() {
     formState: { errors },
   } = useForm();
   const { createExam, insertQuestionExam } = useExams();
-  const { Questions, getQuestions, setActive } = useQuestions();
+  const { Questions, getQuestions, setActive} = useQuestions();
 
   const navigate = useNavigate();
   const [listQuestions, setListQuestions] = useState([]);
@@ -52,18 +52,20 @@ function ExamForm() {
   const dragingOver = (evt) => {
     evt.preventDefault();
   };
-
+ 
   const onDrop = async (evt) => {
     evt.preventDefault();
     const itemID = evt.dataTransfer.getData("itemID");
     const item = JSON.parse(itemID);
-    //const item = await getQuestion(parseInt(itemID));
+    //const item = await getQuestion(JSON.parse(itemID).id_question);
+   // console.log(Questions)
 
     if (notRepeatArrays(listQuestions, item)) {
       alert("!This Question is Repeat!");
     } else {
       setListQuestions([...listQuestions, item]);
       maxScores(maxScore, listQuestions.length + 1);
+      console.log(item)
     }
     setActive(false);
   };
@@ -136,7 +138,7 @@ function ExamForm() {
         <div
           droppable="true"
           onDragOver={(evt) => dragingOver(evt)}
-          onDrop={(evt) => onDrop(evt, Questions)}
+          onDrop={(evt) => onDrop(evt)}
         >
           {listQuestions.length < 1 && (
             <div className="px-10 py-5 ">
@@ -177,7 +179,7 @@ function ExamForm() {
                   >
                     {" "}
                     <rect
-                      x="3"
+                      x="3" 
                       y="3"
                       width="18"
                       height="18"
@@ -192,7 +194,7 @@ function ExamForm() {
 
               <QuestionExamCard
                 question={question}
-                index={index + 1}
+                index={index}
               ></QuestionExamCard>
             </div>
           ))}
@@ -200,6 +202,7 @@ function ExamForm() {
       </div>
     </div>
   );
+  
 }
 
 export default ExamForm;

@@ -6,12 +6,7 @@ import {
   putQuestionsRequest,
   createQuestionRequest,
 } from "../api/question.js";
-import {
-  createAnswersRequest,
-  putAnswersRequest,
-  deleteAnswersRequest,
-  refreshListAnswerRequest,
-} from "../api/answer.js";
+
 
 const QuestionContext = createContext();
 
@@ -84,41 +79,8 @@ export function QuestionProvider({ children }) {
       console.error(error);
     }
   };
-  const createAnswer = async (answer, id, done) => {
-    try {
-      const reAnswer = {
-        body_answer: answer,
-        question_id: id.toString(),
-        done: done,
-      };
-      const res = await createAnswersRequest(reAnswer);
-      //console.log(reAnswer)
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const updateAnswer = async (id, answer) => {
-    try {
-      await putAnswersRequest(id, { body_answer: answer });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const deleteAnswer = async (id) => {
-    try {
-      await deleteAnswersRequest(id);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const refreshListAnswer = async (answerList, id) => {
-    try {
-      const refreshAnswerList = { answers: answerList, id_question: id };
-      await refreshListAnswerRequest(refreshAnswerList);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+
+
 
   return (
     <QuestionContext.Provider
@@ -131,12 +93,8 @@ export function QuestionProvider({ children }) {
         deleteQuestion,
         getQuestion,
         updateQuestion,
-        createAnswer,
-        updateAnswer,
-        deleteAnswer,
         Active,
         updateForm,
-        refreshListAnswer,
         createQuestionWithAnswer,
       }}
     >

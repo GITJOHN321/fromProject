@@ -10,12 +10,13 @@ function QuestionCard({ question }) {
   const startDrag = (evt, item) => {
    // evt.dataTransfer.setData("itemID", item.id_question);
    evt.dataTransfer.setData("itemID", JSON.stringify(item));
+
   };
 
   const sendEdit = (question) => {
     updateForm();
     setQuestion(question);
-  };
+  }; 
  
   
   return (
