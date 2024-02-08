@@ -14,12 +14,18 @@ function ExamForm() {
   } = useForm();
   const { createExam, insertQuestionExam, listQuestions, setListQuestions } =
     useExams();
-  const { getQuestions, setActive } = useQuestions();
+  const { getQuestions, setActive, updateForm, setQuestion } = useQuestions();
 
   const navigate = useNavigate();
 
   const [scores, setScores] = useState([0]);
   const [maxScore, setMaxScore] = useState([0]);
+  //button update Question-------------------------------------------------------
+
+  const sendEdit = (question) => {
+    updateForm();
+    setQuestion(question);
+  };
 
   //question listInputs-----------------------------------------------------------
   const removeFields = (index) => {
@@ -197,6 +203,14 @@ function ExamForm() {
                 question={question}
                 index={index}
               ></QuestionExamCard>
+              <Link
+                onClick={() => {
+                  sendEdit(question);
+                }}
+                className="bg-sky-600  hover:bg-sky-700 text-white px-4 py-2 rounded-md"
+              >
+                Edit
+              </Link>
             </div>
           ))}
         </div>

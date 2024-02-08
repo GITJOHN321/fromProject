@@ -42,7 +42,27 @@
     .tag{
         @apply  bg-blue-100 text-blue-800 text-sm font-medium  w-full px-1 mx-0.5 py-1 my-0.5 rounded dark:bg-[#001336] dark:text-white cursor-pointer text-nowrap text-center hover:bg-[#007cc4]
     }
+    .Dropdown-item{
+        @apply flex w-full items-center hover:bg-blue-200 cursor-pointer  py-2 px-10 text-zinc-900
+    }
+    .Dropdown-menu{
+        @apply z-10 absolute top-14 right-0 rounded-lg py-2  text-nowrap  bg-slate-100 border-[#001336] border-2
+    }
+
 } 
+.Dropdown-menu.active{
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: 500ms ease;
+}
+.Dropdown-menu.inactive{
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition: 500ms ease;
+
+}
 body{
     background: #bfdbfe;
     color: #111827;

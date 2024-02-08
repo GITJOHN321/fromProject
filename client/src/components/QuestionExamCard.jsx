@@ -1,13 +1,8 @@
-import { Link } from "react-router-dom";
-import { useQuestions } from "../context/QuestionContext";
+
 import { FaCheck } from "react-icons/fa";
 
 function QuestionExamCard({ question, index }) {
-  const {updateForm, setQuestion } = useQuestions();
-  const sendEdit = (question) => {
-    updateForm();
-    setQuestion(question);
-  };
+ 
   return (
     <div className=""> 
       <h1 className="text-xl font-bold">
@@ -21,14 +16,7 @@ function QuestionExamCard({ question, index }) {
         ))}
       </ul>
 
-      <Link
-        onClick={() => {
-          sendEdit(question);
-        }}
-        className="bg-sky-600  hover:bg-sky-700 text-white px-4 py-2 rounded-md"
-      >
-        Edit
-      </Link>
+      
     </div>
   );
 }
