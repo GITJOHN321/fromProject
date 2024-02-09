@@ -15,16 +15,18 @@ function Navbar() {
     setIsOpen((prev) => !prev);
   };
   useEffect(() => {
-    let handler = (e) => {
-      if (!menuRef.current.contains(e.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-
-    return () => {
-      document.removeEventListener("mousedown", handler);
-    };
+    if(isAuthenticated){
+      let handler = (e) => {
+        if (!menuRef.current.contains(e.target)) {
+          setIsOpen(false);
+        }
+      };
+      document.addEventListener("mousedown", handler);
+  
+      return () => {
+        document.removeEventListener("mousedown", handler);
+      };
+    }
   }, []);
 
   return (
@@ -62,7 +64,7 @@ function Navbar() {
                   onClick={() => {
                     setIsOpen(false);
                   }}
-                  url={"/"}
+                  url={"/profile"}
                   text={"Mi Perfil"}
                   favicon={<FaRegUserCircle />}
                 />

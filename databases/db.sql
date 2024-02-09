@@ -10,14 +10,14 @@ CREATE TABLE categories (
     name_category VARCHAR(200) NOT NULL UNIQUE,
     id_users INTEGER NOT NULL,
     createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_users) REFERENCES users(id_users)
+    FOREIGN KEY (id_users) REFERENCES users(id_users) ON DELETE CASCADE
 );
 CREATE TABLE subcategories (
     id_subcategory INTEGER PRIMARY KEY AUTO_INCREMENT,
     id_category INTEGER NOT NULL,
     name_subcategory VARCHAR(255) NOT NULL UNIQUE,
    
-    FOREIGN KEY (id_category) REFERENCES categories(id_category)
+    FOREIGN KEY (id_category) REFERENCES categories(id_category) ON DELETE CASCADE
 );
 CREATE TABLE questions (
     id_question INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -27,7 +27,7 @@ CREATE TABLE questions (
     id_user INTEGER NOT NULL,
     list_answers JSON NOT NULL,
     createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_user) REFERENCES users(id_users)
+    FOREIGN KEY (id_user) REFERENCES users(id_users) ON DELETE CASCADE
 );
 CREATE TABLE answers(
     id_answer INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -40,8 +40,8 @@ CREATE TABLE question_category(
     id_subcategory INTEGER NOT NULL,
     id_question INTEGER NOT NULL,
     PRIMARY KEY (id_question, id_subcategory),
-    FOREIGN KEY (id_question) REFERENCES questions(id_question),
-    FOREIGN KEY (id_subcategory) REFERENCES subcategories(id_subcategory)
+    FOREIGN KEY (id_question) REFERENCES questions(id_question) ON DELETE CASCADE, 
+    FOREIGN KEY (id_subcategory) REFERENCES subcategories(id_subcategory) ON DELETE CASCADE
 );
 select * from questions JOIN question_category ON questions.id_question = question_category.id_question JOIN subcategorys ON question_category.id_subcategory = subcategorys.id_subcategory;
 
@@ -61,7 +61,7 @@ CREATE TABLE exams(
     max_score DECIMAL(5, 2) NOT NULL,
     id_user INTEGER NOT NULL,
     createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_user) REFERENCES users(id_users)
+    FOREIGN KEY (id_user) REFERENCES users(id_users) ON DELETE CASCADE
 );
 
 
@@ -72,8 +72,8 @@ CREATE TABLE question_exam (
     id_question INTEGER NOT NULL,
     id_exam INTEGER NOT NULL,
     PRIMARY KEY (id_question, id_exam),
-    FOREIGN KEY (id_question) REFERENCES questions(id_question),
-    FOREIGN KEY (id_exam) REFERENCES exams(id_exam)
+    FOREIGN KEY (id_question) REFERENCES questions(id_question) ON DELETE CASCADE, 
+    FOREIGN KEY (id_exam) REFERENCES exams(id_exam) ON DELETE CASCADE
 );
 --Lista de Preguntas en un examen
 SELECT question_exam.*, questions.title FROM question_exam JOIN exams ON question_exam.id_exam = exams.id_exam JOIN questions ON question_exam.id_question = questions.id_question ORDER BY question_exam.id_exam ASC WHERE question_exam.id_exam = 1 ;
@@ -87,8 +87,8 @@ CREATE TABLE user_resolved (
     resolved_time_minutes INT NOT NULL DEFAULT 0,
     id_exam INTEGER NOT NULL,
     createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_user) REFERENCES users(id_users),
-    FOREIGN KEY (id_exam) REFERENCES exams(id_exam)
+    FOREIGN KEY (id_user) REFERENCES users(id_users) ON DELETE CASCADE,
+    FOREIGN KEY (id_exam) REFERENCES exams(id_exam) ON DELETE CASCADE
 );
 
 --Lista de usuarios que han resuelto un determinado examen

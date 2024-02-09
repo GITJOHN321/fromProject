@@ -1,5 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { registerRequest, loginRequest, verifyTokenRequest } from "../api/auth";
+import {
+  registerRequest,
+  loginRequest,
+  verifyTokenRequest,
+  changePasswordFromPerfil,
+  deleteUser,
+} from "../api/auth";
 import Cookies from "js-cookie";
 
 export const AuthContext = createContext();
@@ -18,15 +24,15 @@ export const AuthProvider = ({ children }) => {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const resetErrors = () =>{
-    setErrors([])
-  }
+  const resetErrors = () => {
+    setErrors([]);
+  };
 
   const signup = async (user) => {
     try {
       const res = await registerRequest(user);
       console.log(res.data);
-      return res.data
+      return res.data;
       //setUser(res.data);
       //setIsAuthenticated(true);
     } catch (error) {
@@ -44,11 +50,30 @@ export const AuthProvider = ({ children }) => {
       setErrors(error.response.data);
     }
   };
-  const logout = () =>{
-    Cookies.remove("token") 
-    setIsAuthenticated(false)
-    setUser(null)
-  }
+  const changePasswordPerfil = async (data) => {
+    try {
+      const res = await changePasswordFromPerfil(data);
+
+      return res;
+    } catch (error) {
+      setErrors(error.response.data);
+    }
+  };
+  const deleteUserFromProfile = async () => {
+    try {
+      await deleteUser();
+      Cookies.remove("token");
+      setIsAuthenticated(false);
+      setUser(null);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const logout = () => {
+    Cookies.remove("token");
+    setIsAuthenticated(false);
+    setUser(null);
+  };
   useEffect(() => {
     async function checkLogin() {
       const cookies = Cookies.get();
@@ -67,9 +92,9 @@ export const AuthProvider = ({ children }) => {
           setUser(null);
           return;
         }
-        setIsAuthenticated(true)
-        setLoading(false)
-        setUser(res.data)
+        setIsAuthenticated(true);
+        setLoading(false);
+        setUser(res.data);
       } catch (error) {
         console.log(error);
         setIsAuthenticated(false);
@@ -82,7 +107,18 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ signup, signin, loading, logout, user, isAuthenticated, errors, resetErrors }}
+      value={{
+        signup,
+        signin,
+        loading,
+        logout,
+        user,
+        isAuthenticated,
+        errors,
+        resetErrors,
+        changePasswordPerfil,
+        deleteUserFromProfile,
+      }}
     >
       {children}
     </AuthContext.Provider>
