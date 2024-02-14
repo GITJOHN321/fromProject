@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { formatDate } from "../utils/utilsScripts.js";
 import { FaRegCheckCircle } from "react-icons/fa";
-
+import { HiChevronRight } from "react-icons/hi";
 function ProfilePage() {
   const {
     register,
@@ -21,6 +21,9 @@ function ProfilePage() {
   } = useAuth();
   const [corret, setCorret] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
+  useEffect(() => {
+    resetErrors();
+  }, []);
   const onSubmit = handleSubmit(async (data) => {
     const change = await changePasswordPerfil(data);
 
@@ -70,24 +73,46 @@ function ProfilePage() {
               type="password"
               {...register("old_password", { required: true })}
               className="w-full input px-4 py-2 rounded-md my-2"
-              placeholder="Email"
+              placeholder="Current Password"
             />
             <label htmlFor="">CONTRASEÑA NUEVA</label>
             <input
               type="password"
               {...register("new_password", { required: true })}
               className="w-full input px-4 py-2 rounded-md my-2"
-              placeholder="Password"
+              placeholder="New Password"
             />
             <label htmlFor="">REPITA LA CONTRASEÑA</label>
             <input
               type="password"
               {...register("new_password2", { required: true })}
               className="w-full input px-4 py-2 rounded-md my-2"
-              placeholder="Password"
+              placeholder="Repeat New Password"
             />
             <br />
-
+            <div className="text-sky-600">
+              <hr />
+              <br />
+              <h3>
+                <strong>The password must have</strong>
+              </h3>
+              <ul>
+                <li className="flex items-center">
+                  <HiChevronRight />
+                  Min 7 characters
+                </li>
+                <li className="flex items-center">
+                  <HiChevronRight />
+                  At least one capital letter
+                </li>
+                <li className="flex items-center">
+                  <HiChevronRight />
+                  At least one number
+                </li>
+              </ul>
+              <br />
+              <hr />
+            </div>
             <button
               type="submit"
               className=" p-2 my-4 bg-sky-600 hover:bg-sky-500 text-white font-medium rounded-lg"

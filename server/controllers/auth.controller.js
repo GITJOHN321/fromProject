@@ -5,8 +5,9 @@ import { TOKEN_SECRET } from "../config.js";
 import { createAccesToken } from "../libs/jwt.js";
 
 export const register = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, password2} = req.body;
   try {
+    if(password !== password2) return res.status(500).json(["passwords do not match"])
     const passwordHash = await bcrypt.hash(password, 10);
     const [result] = await pool.query(
       "INSERT INTO users(username,email,password) VALUES(?,?,?)",
@@ -107,7 +108,7 @@ export const changePasswordFromPerfil = async (req, res) => {
   try {
     const { old_password, new_password, new_password2 } = req.body;
     const { id } = req.user;
-
+    
     if (new_password !== new_password2)
       return res.status(400).json(["new passwords do not match"]);
     if (old_password === new_password2)
