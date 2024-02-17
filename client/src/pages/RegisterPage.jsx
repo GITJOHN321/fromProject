@@ -31,8 +31,8 @@ function RegisterPage() {
   });
 
   return (
-    <div className="flex h-[calc(100vh-100px)] items-center justify-center">
-      <div className="bg-slate-100 max-w-md py-10 rounded-md">
+    <div className="flex my-4 items-center justify-center">
+      <div className="bg-slate-100 max-w-md py-10  rounded-md">
         <h1 className="text-2xl font-bold py-1 head px-10 mb-2">Register</h1>
         <form className="px-10" onSubmit={onSubmit}>
           {RegisterErrors.map((error, i) => (

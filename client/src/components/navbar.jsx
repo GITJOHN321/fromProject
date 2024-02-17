@@ -73,7 +73,7 @@ function Navbar() {
                     setIsOpen(false);
                   }}
                   favicon={<TbCategory />}
-                  url={"/"}
+                  url={"/Categories"}
                   text={"Categorias"}
                 />
                 <DropdownItem

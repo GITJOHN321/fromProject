@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import ExamPage from "./pages/ExamPage.jsx";
+import CategoryPage from "./pages/CategoryPage.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { QuestionProvider } from "./context/QuestionContext";
 import { ExamProvider } from "./context/ExamContext.jsx";
@@ -17,9 +18,8 @@ function App() {
         <ExamProvider>
           <QuestionProvider>
             <BrowserRouter>
-            <Navbar></Navbar>
+              <Navbar></Navbar>
               <main className="container mx-auto px-10">
-                
                 <Routes>
                   <Route path="/" element={<HomePage />} />
                   <Route path="/login" element={<LoginPage />} />
@@ -28,7 +28,7 @@ function App() {
                   <Route element={<ProtectedRoute />}>
                     <Route path="/create-exam" element={<ExamPage />} />
                     <Route path="/create-exam/:id" element={<ExamPage />} />
-
+                    <Route path="/categories"  element={<CategoryPage></CategoryPage>}></Route>
                     <Route path="/profile" element={<ProfilePage />} />
                   </Route>
                 </Routes>
