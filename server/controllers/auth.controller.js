@@ -3,11 +3,15 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
 import { createAccesToken } from "../libs/jwt.js";
+import { v4 as uuidv4 } from 'uuid';
+
 
 export const register = async (req, res) => {
   const { username, email, password, password2} = req.body;
   try {
     if(password !== password2) return res.status(500).json(["passwords do not match"])
+    //GENERATE CODE UUID--------------------
+    const code = uuidv4()
     const passwordHash = await bcrypt.hash(password, 10);
     const [result] = await pool.query(
       "INSERT INTO users(username,email,password) VALUES(?,?,?)",
