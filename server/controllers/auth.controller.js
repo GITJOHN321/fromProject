@@ -2,22 +2,24 @@ import { pool } from "../db.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
-import { createAccesToken } from "../libs/jwt.js";
-import { v4 as uuidv4 } from 'uuid';
-
+import { createAccesToken, getTokenData } from "../libs/jwt.js";
+import { getTemplate, sendEmail } from "../config/mail.config.js";
 
 export const register = async (req, res) => {
-  const { username, email, password, password2} = req.body;
+  const { username, email, password, password2 } = req.body;
   try {
-    if(password !== password2) return res.status(500).json(["passwords do not match"])
-    //GENERATE CODE UUID--------------------
-    const code = uuidv4()
+    if (password !== password2)
+      return res.status(500).json(["passwords do not match"]);
+
     const passwordHash = await bcrypt.hash(password, 10);
     const [result] = await pool.query(
       "INSERT INTO users(username,email,password) VALUES(?,?,?)",
       [username, email, passwordHash]
     );
+    const emailToken = await createAccesToken({ id: result.insertId });
 
+    const template = getTemplate(username, emailToken);
+    await sendEmail(email, "test from server", template);
     res.json({
       id: result.insertId,
       username,
@@ -112,7 +114,7 @@ export const changePasswordFromPerfil = async (req, res) => {
   try {
     const { old_password, new_password, new_password2 } = req.body;
     const { id } = req.user;
-    
+
     if (new_password !== new_password2)
       return res.status(400).json(["new passwords do not match"]);
     if (old_password === new_password2)
@@ -142,13 +144,42 @@ export const changePasswordFromPerfil = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   try {
-    const [result] = await pool.query(
-      "DELETE FROM users WHERE id_users = ?",
-      [req.user.id]
-    );
-    console.log(result[0])
+    const [result] = await pool.query("DELETE FROM users WHERE id_users = ?", [
+      req.user.id,
+    ]);
+    console.log(result[0]);
     return res.sendStatus(204);
   } catch (error) {
     return res.status(500).json({ message: error.message });
+  }
+};
+
+export const verifyTokenEmail = async (req, res) => {
+  try {
+    //Obtener token---------------------------
+    const { emailToken } = req.params;
+
+    //verificar data del token----------------
+    const data = await getTokenData(emailToken);
+    if (data === null) {
+      return res.status(500).json({ message: "error al recibir token" });
+    }
+    console.log(data);
+    const { id } = data.data;
+    //verificar existencia dle usuario--------
+
+    const [userFound] = await pool.query(
+      "SELECT * FROM users WHERE id_users = ?",
+      [id]
+    );
+    if (!userFound[0]) return res.status(400).json(["User not found"]);
+
+    //actualizar status del usuario-----------
+    await pool.query("UPDATE users SET status = 1 WHERE id_users = ?", [id]);
+
+    return res.json({ succes: true, msg: "Te registraste correctamente" });
+  } catch (error) {
+    console.error(error);
+    return res.json({ succes: false, msg: "Algo falló o el Token expiró" });
   }
 };

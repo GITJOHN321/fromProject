@@ -3,7 +3,6 @@ CREATE TABLE users(
     username varchar(40) NOT NULL UNIQUE,
     email varchar (320) NOT NULL UNIQUE, 
     status boolean NOT NULL DEFAULT 0,
-    code varchar (255),
     password varchar(255) NOT NULL,
     createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

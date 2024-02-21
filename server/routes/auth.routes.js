@@ -7,6 +7,7 @@ import {
   verifyToken,
   changePasswordFromPerfil,
   deleteUser,
+  verifyTokenEmail
 } from "../controllers/auth.controller.js";
 import { authRequired } from "../middlewares/validateToken.js";
 import { validateSchema } from "../middlewares/validator.schema.js";
@@ -28,6 +29,7 @@ router.post(
   changePasswordFromPerfil
 );
 router.get("/verify", verifyToken);
+router.get("/verifyEmail/:tokenEmail", verifyTokenEmail);
 router.get("/profile", authRequired, profile);
 router.delete("/user", authRequired, deleteUser);
 

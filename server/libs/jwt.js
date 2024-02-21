@@ -18,4 +18,16 @@ export function createAccesToken(payload) {
     );
   });
 }
-//create a promise that receive a token 
+//create a promise that receive a token
+export function getTokenData(token) {
+  let data = null;
+  jwt.verify(token, TOKEN_SECRET, (err, decoded) => {
+    if (err) {
+      console.log("Error al obtener data del token");
+      return res.status(401).json({ message: "Unauthorized" });
+    }else{
+      data = decoded
+    }
+  });
+  return data
+}
