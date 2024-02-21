@@ -42,9 +42,9 @@ export const login = async (req, res) => {
       "SELECT * FROM users WHERE email = ?",
       [email]
     );
-
+    
     if (!userFound[0]) return res.status(400).json(["User not found"]);
-
+    if(userFound[0].status === 0)return res.status(400).json(["Account not verified"])
     const isMatch = await bcrypt.compare(password, userFound[0].password);
 
     if (!isMatch) return res.status(400).json(["Incorrect password"]);
@@ -106,6 +106,7 @@ export const verifyToken = async (req, res) => {
       username: userFound[0].username,
       email: userFound[0].email,
       date: new Date(userFound[0].createdAt).toLocaleDateString(),
+      status: userFound[0].status
     });
   });
 };
@@ -157,15 +158,15 @@ export const deleteUser = async (req, res) => {
 export const verifyTokenEmail = async (req, res) => {
   try {
     //Obtener token---------------------------
-    const { emailToken } = req.params;
-
+    const {emailToken}  = req.params;
+    console.log(emailToken)
     //verificar data del token----------------
-    const data = await getTokenData(emailToken);
+    const data =  getTokenData(emailToken);
     if (data === null) {
       return res.status(500).json({ message: "error al recibir token" });
     }
     console.log(data);
-    const { id } = data.data;
+    const { id } = data;
     //verificar existencia dle usuario--------
 
     const [userFound] = await pool.query(
@@ -176,7 +177,7 @@ export const verifyTokenEmail = async (req, res) => {
 
     //actualizar status del usuario-----------
     await pool.query("UPDATE users SET status = 1 WHERE id_users = ?", [id]);
-
+    console.log("your win")
     return res.json({ succes: true, msg: "Te registraste correctamente" });
   } catch (error) {
     console.error(error);

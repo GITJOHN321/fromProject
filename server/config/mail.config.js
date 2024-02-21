@@ -31,7 +31,7 @@ export const getTemplate = (name, token) => {
     <div>
     <h2>Hola como estas ${name}?</h2>
     <p>Para confirmar tu cuenta, ingresa al siguiente enlace: </p>
-    <a href="http://localhost:5173/" target="_blank">Confirmar Cuenta</a>
+    <a href="http://localhost:4000/api/verifyEmail/${token}" target="_blank">Confirmar Cuenta</a>
     </div>
     `
 }

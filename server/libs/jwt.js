@@ -19,15 +19,15 @@ export function createAccesToken(payload) {
   });
 }
 //create a promise that receive a token
-export function getTokenData(token) {
+export const getTokenData = (token) => {
   let data = null;
-  jwt.verify(token, TOKEN_SECRET, (err, decoded) => {
+  jwt.verify(token, TOKEN_SECRET, async (err, decoded) => {
     if (err) {
-      console.log("Error al obtener data del token");
-      return res.status(401).json({ message: "Unauthorized" });
-    }else{
-      data = decoded
+      console.log("Error al obtener data del token", err);
+      return { message: "Unauthorized" };
+    } else {
+      data = decoded;
     }
   });
-  return data
-}
+  return data;
+};

@@ -29,7 +29,7 @@ router.post(
   changePasswordFromPerfil
 );
 router.get("/verify", verifyToken);
-router.get("/verifyEmail/:tokenEmail", verifyTokenEmail);
+router.get("/verifyEmail/:emailToken", verifyTokenEmail);
 router.get("/profile", authRequired, profile);
 router.delete("/user", authRequired, deleteUser);
 
